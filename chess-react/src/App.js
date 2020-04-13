@@ -4,7 +4,7 @@ import Title from './Title';
 
 function App() {
   return (
-    <div className="text-center">
+    <div className="container">
       <Title/>
       <Form/>
     </div>

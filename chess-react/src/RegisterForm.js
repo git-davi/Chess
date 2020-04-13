@@ -19,16 +19,17 @@ export default function RegisterForm({ setRegistration, registration }) {
 
     return (
         <form action="/auth/register" onSubmit={validateForm}>
-            <Input type={"email"} label="Email :" placeholder={"Enter Username"}/>
-            <Input type={"text"} label="Username :" placeholder={"Enter Username"}/>
-            <Input innerRef={passRef} type={"password"} label="Password :" placeholder={"Enter Password"}/>
-            <Input  innerRef={validPassRef}
+            <Input id={"reg-email"} type={"email"} label="Email" placeholder={"Enter Username"}/>
+            <Input id={"reg-user"} type={"text"} label="Username" placeholder={"Enter Username"}/>
+            <Input id={"reg-pass-1"} innerRef={passRef} type={"password"} label="Password" placeholder={"Enter Password"}/>
+            <Input  id={"reg-pass-2"}
+                    innerRef={validPassRef}
                     type={"password"} 
-                    label="Repeat Password :" 
-                    placeholder={"Enter Password"}
+                    label="Repeat Password" 
+                    placeholder={"Enter Password Again"}
                 />
             { valid ? null 
-            : <div className="alert alert-danger" role="alert">Passwords must be equals</div> }
+            : <div className="alert alert-danger" role="alert">Passwords must be equal</div> }
             <ButtonBar  setRegistration={setRegistration}
                 registration={registration}
             />

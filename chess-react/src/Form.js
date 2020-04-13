@@ -8,7 +8,7 @@ export default function Form() {
     const [registration, setRegistration] = useState(false)
 
     return (
-        <div className="mt-5" >
+        <div className="jumbotron" >
             { !registration 
             ? <LoginForm setRegistration={setRegistration} registration={registration} />
             : <RegisterForm setRegistration={setRegistration} registration={registration} />

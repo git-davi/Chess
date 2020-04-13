@@ -6,8 +6,8 @@ import ButtonBar from './ButtonBar';
 export default function LoginForm({ setRegistration, registration }) {
     return (
         <form action="/auth">
-            <Input type={"text"} label="Username :" placeholder={"Enter Username"}/>
-            <Input type={"password"} label="Password :" placeholder={"Enter Password"}/>
+            <Input id={"log-user"} type={"text"} label="Username" placeholder={"Enter Username"}/>
+            <Input id={"log-pass"} type={"password"} label="Password" placeholder={"Enter Password"}/>
             <ButtonBar  setRegistration={setRegistration}
                         registration={registration}
                         />

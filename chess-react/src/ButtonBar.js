@@ -7,28 +7,44 @@ export default function ButtonBar({ setRegistration, registration }) {
         setRegistration(!registration);
     }
 
-    if (registration) {
+    function buttonBarLogin() {
         return (
-            <div className="container">
-                <button className="btn btn-secondary" 
-                        type="button"
-                        onClick={renderForm}        
-                >Login</button>
-                <button className="btn btn-primary" type="submit" >Register</button>
-            </div>
-        );
-    }
-    else {
-        return (
-            <div className="container">
-                <button className="btn btn-primary" type="submit">Login</button>
-                <button className="btn btn-secondary" 
-                        type="button" 
-                        onClick={renderForm}
-                >Register</button>
-            </div>
+            <>
+                <div className="container col">
+                    <button className="btn btn-primary btn-block btn-lg" type="submit">Login</button>
+                </div>
+                <div className="container col">
+                    <button className="btn btn-secondary btn-block btn-lg" 
+                            type="button" 
+                            onClick={renderForm}
+                    >Register</button>
+                </div>
+            </>
         );
     }
 
-    
+    function buttonBarRegistration() {
+        return (
+            <>
+                <div className="container col">
+                    <button className="btn btn-secondary btn-block btn-lg" 
+                            type="button"
+                            onClick={renderForm}        
+                    >Login</button>
+                </div>
+                <div className="container col">
+                <button className="btn btn-primary btn-block btn-lg" type="submit" >Register</button>
+                </div>
+            </>
+        );
+    }
+
+    return (
+        <div className="row mt-5">
+            {registration 
+                ? buttonBarRegistration() 
+                : buttonBarLogin()
+            }
+        </div>
+    );
 }
