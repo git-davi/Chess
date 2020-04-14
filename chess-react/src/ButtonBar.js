@@ -10,11 +10,11 @@ export default function ButtonBar({ setRegistration, registration }) {
     function buttonBarLogin() {
         return (
             <>
-                <div className="container col">
-                    <button className="btn btn-primary btn-block btn-lg" type="submit">Login</button>
-                </div>
-                <div className="container col">
-                    <button className="btn btn-secondary btn-block btn-lg" 
+                <div className="col">
+                    <button className="btn btn-primary btn-block btn-lg mt-1" type="submit">Login</button>
+                </div> 
+                <div className="col">
+                    <button className="btn btn-secondary btn-block btn-lg mt-1" 
                             type="button" 
                             onClick={renderForm}
                     >Register</button>
@@ -26,14 +26,14 @@ export default function ButtonBar({ setRegistration, registration }) {
     function buttonBarRegistration() {
         return (
             <>
-                <div className="container col">
-                    <button className="btn btn-secondary btn-block btn-lg" 
+                <div className="col">
+                    <button className="btn btn-secondary btn-block btn-lg mt-1" 
                             type="button"
                             onClick={renderForm}        
                     >Login</button>
                 </div>
-                <div className="container col">
-                <button className="btn btn-primary btn-block btn-lg" type="submit" >Register</button>
+                <div className="col">
+                    <button className="btn btn-primary btn-block btn-lg mt-1" type="submit" >Register</button>
                 </div>
             </>
         );
