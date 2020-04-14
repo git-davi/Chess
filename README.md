@@ -55,7 +55,20 @@ To run the server in debug mode:
 $ DEBUG=chess:* npm start
 ```
 
+To run with nodemon
+```
+$ npm run nodemon
+```
+
 To run in production mode :
 ```shell
 $ NODE_ENV=production npm start
 ```
+
+### to run with react in development 
+```shell
+npm run nodemon
+cd chess-react 
+npm start
+```
+you will be asked if you want to use another port -> Yes

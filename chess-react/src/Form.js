@@ -9,7 +9,7 @@ export default function Form() {
 
     return (
         <div className="row justify-content-center">
-                <div className="jumbotron" >
+                <div className="jumbotron col-5" >
                     { !registration 
                     ? <LoginForm setRegistration={setRegistration} registration={registration} />
                     : <RegisterForm setRegistration={setRegistration} registration={registration} />
