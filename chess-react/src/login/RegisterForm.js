@@ -1,12 +1,9 @@
-import React, { useRef } from 'react';
+import React from 'react';
 
 import Input from './Input';
 
 
-export default function RegisterForm() {
-
-    const passRef = useRef();
-    const validPassRef = useRef();
+export default function RegisterForm({ passRef, validPassRef }) {
 
     return (
         <>

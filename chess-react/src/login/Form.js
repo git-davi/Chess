@@ -1,26 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Redirect } from 'react-router-dom';
 
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
 import ButtonBar from './ButtonBar';
+import Alert from './Alert';
 import { validateForm, loginSubmit } from './SubmitFunc';
 
 
 export default function Form() {
 
-    const [form, setForm] = useState('login');
-    const [error, setError] = useState();
-    const [success, setSuccess] = useState();
-    const [redirect, setRedirect] = useState();
+    const passRef = useRef();
+    const validPassRef = useRef();
 
-    // da rifare l'interfaccia con il server e la redirection
+    const [form, setForm] = useState('login');
+    const [response, setResponse] = useState({ type: null, value: null });
+
     function login(event) {
-        console.log('login')
+        loginSubmit(event, setResponse);
     }
 
     function register(event) {
-        console.log('register')
+        validateForm(event, setResponse, passRef, validPassRef);
     }
 
     function changeForm() {
@@ -32,16 +33,16 @@ export default function Form() {
 
     }
 
-    if (redirect)
-        return ( <Redirect to={ redirect } /> );
+    // come fare il login middleware che si attiva dopo un success tra registrazione e login
+    if (false)
+        return ( <Redirect to='/game' /> );
 
     return (
         <div className="row justify-content-center">
                 <div className="jumbotron col-5" >
                     <form onSubmit={form === 'login' ? login : register}>
-                        { form === 'login' ? <LoginForm /> : <RegisterForm /> }
-                        { error && <div className="alert alert-danger" role="alert">{error}</div> }
-                        { success && <div className="alert alert-success" role="alert">{success}</div> }
+                        { form === 'login' ? <LoginForm /> : <RegisterForm passRef={passRef} validPassRef={validPassRef} /> }
+                        <Alert response={response} />
                         <ButtonBar  changeForm={changeForm} form={ form }/>
                     </form>
                 </div>

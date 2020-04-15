@@ -17,12 +17,14 @@ module.exports.submitLogin = async (req, res) => {
 
     if (user == -1) {
         res.json({
-            error: 'Server side error'
+            type: 'error',
+            value: 'Server side error'
         });
     }
     else if (user == undefined) {
         res.json({
-            error: 'Wrong username or password'
+            type: 'error',
+            value: 'Wrong username or password'
         });
     } 
     else {
@@ -30,7 +32,8 @@ module.exports.submitLogin = async (req, res) => {
         let token = tokenHandler.createToken(user, games);
         tokenHandler.setToken(res, token);
         res.json({
-            success: 'Login successfull'
+            type: 'success',
+            value: 'Login successfull'
         });
     }
 };
@@ -43,7 +46,8 @@ module.exports.submitRegistration = async (req, res) => {
 
     if (exists) {
         res.json({
-            error: 'Username already taken'
+            type: 'error',
+            value: 'Username already taken'
         });
         return;
     }
@@ -52,12 +56,16 @@ module.exports.submitRegistration = async (req, res) => {
 
     if (created == undefined) {
         res.json({
-            error: 'Registration failed, retry later'
+            type: 'error',
+            value: 'Registration failed, retry later'
         })
     }
     else {
+        let token = tokenHandler.createToken(created, undefined);
+        tokenHandler.setToken(res, token);
         res.json({
-            success: 'Registration successfull'
+            type: 'success',
+            value: 'Registration successfull'
         });
     }
 };

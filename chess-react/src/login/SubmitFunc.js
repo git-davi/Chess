@@ -1,45 +1,40 @@
 import axios from 'axios';
 
-export function loginSubmit(event) {
-    event.preventDefault();
 
-    axios.post('/auth', {
-            username: event.target.username.value,
-            password: event.target.password.value
-    })
+function request(url, data, setResponse) {
+    axios.post(url, data)
     .then((res) => {
-        if (res.data.error !== undefined)
-            setError(res.data.error);
-        else
-            console.log(res);
+        setResponse(res.data);
     }, (err) => {
         console.log(err);
-    });
+    })
 }
 
-export function validateForm(event, setError, setSuccess) {
+
+export function loginSubmit(event, setResponse) {
+    event.preventDefault();
+
+    request('/auth', {
+        username: event.target.username.value,
+        password: event.target.password.value
+        }, setResponse);
+}
+
+
+export function validateForm(event, setResponse, passRef, validPassRef) {
     event.preventDefault();
 
     if (passRef.current.value !== validPassRef.current.value) {
-        setError('Passwords must be equal');
+        setResponse({
+            type: 'error',
+            value: 'Passwords must be equal'
+        });
         return;
     }
     
-    axios.post('/auth/register', {
+    request('/auth/register', {
         username: event.target.username.value,
         password: event.target.password.value,
         email: event.target.email.value
-    })
-    .then((res) => {
-        if (res.data.error !== undefined) {
-            setError(res.data.error);
-            setSuccess(false);
-        }
-        else if (res.data.success !== undefined) {
-            setSuccess(true);
-            setError(null);
-        }
-    }, (err) => {
-        console.log(err);
-    });
+    }, setResponse);
 }
