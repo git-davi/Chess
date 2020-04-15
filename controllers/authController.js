@@ -4,11 +4,6 @@ const tokenHandler = require('./tokenHandler');
 const dbop = require('./utils/db/operations');
 
 
-module.exports.auth = (req, res) => {
-    // qua dovrà servire l'applicazione react
-    //res.render('auth');
-};
-
 
 module.exports.submitLogin = async (req, res) => {
     const {username, password} = req.body;
@@ -28,12 +23,11 @@ module.exports.submitLogin = async (req, res) => {
         });
     } 
     else {
-        const games = [...dbop.modelsGen(await dbop.getGames(user))];
-        let token = tokenHandler.createToken(user, games);
-        tokenHandler.setToken(res, token);
+        let token = tokenHandler.createToken(username);
         res.json({
             type: 'success',
-            value: 'Login successfull'
+            value: 'Login Successfull',
+            token: token
         });
     }
 };
@@ -61,11 +55,11 @@ module.exports.submitRegistration = async (req, res) => {
         })
     }
     else {
-        let token = tokenHandler.createToken(created, undefined);
-        tokenHandler.setToken(res, token);
+        let token = tokenHandler.createToken(username);
         res.json({
             type: 'success',
-            value: 'Registration successfull'
+            value: 'Registration Successfull',
+            token: token
         });
     }
 };

@@ -1,16 +1,20 @@
-import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import React, { useState, createContext } from 'react';
+
 import Login from './login/Login';
 import Game from './game/Game';
 
+import TOKEN_KEY from './token.js';
+
+export const AuthContext = createContext();
+
 function App() {
+
+  const [auth, setAuth] = useState(localStorage.getItem(TOKEN_KEY) !== null);
+
   return (
-    <Router>
-      <Switch>
-        <Route path="/game" component={ Game }/>
-        <Route path="/" component={ Login }/>
-      </Switch>
-    </Router>
+    <AuthContext.Provider value={{auth : auth,  setAuth : setAuth}}>
+      { auth ? <Game /> : <Login /> }
+    </AuthContext.Provider>
   );
 }
 

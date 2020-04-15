@@ -1,27 +1,33 @@
 import axios from 'axios';
+import TOKEN_KEY from '../token';
 
 
-function request(url, data, setResponse) {
+function request(url, data, setResponse, setAuth) {
     axios.post(url, data)
     .then((res) => {
         setResponse(res.data);
+        if (res.data.token !== undefined) {
+            localStorage.setItem(TOKEN_KEY, res.data.token);
+            setAuth(true);
+        }
+
     }, (err) => {
         console.log(err);
     })
 }
 
 
-export function loginSubmit(event, setResponse) {
+export function loginSubmit(event, setResponse, setAuth) {
     event.preventDefault();
 
     request('/auth', {
         username: event.target.username.value,
         password: event.target.password.value
-        }, setResponse);
+        }, setResponse, setAuth);
 }
 
 
-export function validateForm(event, setResponse, passRef, validPassRef) {
+export function validateForm(event, setResponse, setAuth, passRef, validPassRef) {
     event.preventDefault();
 
     if (passRef.current.value !== validPassRef.current.value) {
@@ -36,5 +42,5 @@ export function validateForm(event, setResponse, passRef, validPassRef) {
         username: event.target.username.value,
         password: event.target.password.value,
         email: event.target.email.value
-    }, setResponse);
+    }, setResponse, setAuth);
 }

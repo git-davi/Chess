@@ -4,7 +4,7 @@ var express = require('express');
 var router = express.Router();
 
 router.get('/', (req, res) => {
-    res.redirect('/game');
+    // this will send react app
 });
 
 module.exports = router;

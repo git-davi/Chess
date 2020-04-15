@@ -7,7 +7,6 @@ const tokenHandler = require('../controllers/tokenHandler');
 
 router.use(tokenHandler.hasToken);
 
-router.get('/', authController.auth);
 router.post('/', authController.submitLogin);
 router.post('/register', authController.submitRegistration);
 

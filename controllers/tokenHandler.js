@@ -11,29 +11,10 @@ module.exports.decodeToken = (req, res, next) => {
 };
 
 
-module.exports.setToken = (res, token) => {
-    res.cookie('token', token);
-};
-
-
-module.exports.addToToken = (token, game_uuid) => {
-    token.games.push(game_uuid);
-    return jwt.sign(
-        token,
-        secretKey,
-        {
-            // expiresIn: '2h'
-        }
-    );
-};
-
-
-module.exports.createToken = (user, games) => {
+module.exports.createToken = (username) => {
     return jwt.sign(
         {
-            username: user.username,
-            elo: user.elo,
-            games: games
+            username: username
         }, 
         secretKey,
         {
@@ -51,7 +32,9 @@ module.exports.verifyToken = (req, res, next) => {
         next();
     }
     catch (err) {
-        res.redirect('/auth');
+        res.json({
+            error: 'invalid token'
+        });
     }
 };
 
@@ -61,7 +44,9 @@ module.exports.hasToken = (req, res, next) => {
 
     try {
         jwt.verify(token, secretKey);
-        res.redirect('/game');
+        res.json({
+            error: 'you already have token'
+        });
     }
     catch (err) {
         next();

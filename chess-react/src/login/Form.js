@@ -1,11 +1,12 @@
-import React, { useState, useRef } from 'react';
-import { Redirect } from 'react-router-dom';
+import React, { useState, useRef, useContext } from 'react';
 
-import LoginForm from './LoginForm';
-import RegisterForm from './RegisterForm';
 import ButtonBar from './ButtonBar';
 import Alert from './Alert';
+import LoginForm from './LoginForm';
+import RegisterForm from './RegisterForm';
+
 import { validateForm, loginSubmit } from './SubmitFunc';
+import {AuthContext} from '../App'; 
 
 
 export default function Form() {
@@ -16,12 +17,14 @@ export default function Form() {
     const [form, setForm] = useState('login');
     const [response, setResponse] = useState({ type: null, value: null });
 
+    const context = useContext(AuthContext);
+
     function login(event) {
-        loginSubmit(event, setResponse);
+        loginSubmit(event, setResponse, context.setAuth);
     }
 
     function register(event) {
-        validateForm(event, setResponse, passRef, validPassRef);
+        validateForm(event, setResponse, context.setAuth, passRef, validPassRef);
     }
 
     function changeForm() {
@@ -33,19 +36,18 @@ export default function Form() {
 
     }
 
-    // come fare il login middleware che si attiva dopo un success tra registrazione e login
-    if (false)
-        return ( <Redirect to='/game' /> );
-
     return (
         <div className="row justify-content-center">
-                <div className="jumbotron col-5" >
+            <div className="card  col-5 bg-light" >
+                <div className="card-body" >
+                    <h4 className="card-title">{form === 'login' ? 'Sign In' : 'Sign Up'}</h4>
                     <form onSubmit={form === 'login' ? login : register}>
                         { form === 'login' ? <LoginForm /> : <RegisterForm passRef={passRef} validPassRef={validPassRef} /> }
                         <Alert response={response} />
                         <ButtonBar  changeForm={changeForm} form={ form }/>
                     </form>
                 </div>
+            </div>
         </div>
     );
 }
