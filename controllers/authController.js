@@ -29,7 +29,9 @@ module.exports.submitLogin = async (req, res) => {
         const games = [...dbop.modelsGen(await dbop.getGames(user))];
         let token = tokenHandler.createToken(user, games);
         tokenHandler.setToken(res, token);
-        res.redirect('/game');
+        res.json({
+            success: 'Login successfull'
+        });
     }
 };
 
@@ -55,7 +57,7 @@ module.exports.submitRegistration = async (req, res) => {
     }
     else {
         res.json({
-            success: true
+            success: 'Registration successfull'
         });
     }
 };

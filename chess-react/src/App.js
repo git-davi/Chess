@@ -1,14 +1,16 @@
 import React from 'react';
-import Form from './Form';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import Login from './login/Login';
+import Game from './game/Game';
 
 function App() {
   return (
-    <div className="container">
-        <div className="text-white text-center m-5">
-            <h1>chess.unimore</h1>
-        </div>
-      <Form/>
-    </div>
+    <Router>
+      <Switch>
+        <Route path="/game" component={ Game }/>
+        <Route path="/" component={ Login }/>
+      </Switch>
+    </Router>
   );
 }
 
