@@ -11,12 +11,8 @@ export default function RegisterForm({ passRef, validPassRef }) {
 
     function checkUsername() {
         axios.get("/auth/users/"+userRef.current.value)
-        .then((res) => {
-            if (res.data.type === 'success')
-                setValid('border border-success');
-            else
-                setValid('border border-danger')
-        }, (err) => console.log(err));
+        .then((res) => setValid('border border-danger')) 
+        .catch((err) => setValid('border border-success'));
     }
 
 

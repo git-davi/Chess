@@ -8,7 +8,6 @@ import TOKEN_KEY from './token.js';
 export const AuthContext = createContext();
 
 function App() {
-
   const [auth, setAuth] = useState(localStorage.getItem(TOKEN_KEY) !== null);
 
   return (

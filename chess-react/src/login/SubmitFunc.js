@@ -5,13 +5,19 @@ import TOKEN_KEY from '../token';
 function request(url, data, setResponse, setAuth) {
     axios.post(url, data)
     .then((res) => {
-        setResponse(res.data);
-        if (res.data.token !== undefined) {
-            localStorage.setItem(TOKEN_KEY, res.data.token);
-            setAuth(true);
-        }
-
-    }, (err) => console.log(err));
+        setResponse({
+            status: res.status,
+            message: res.data.message
+        });
+        localStorage.setItem(TOKEN_KEY, res.data.token);
+        setAuth(true);
+    })
+    .catch((err) => {
+        setResponse({
+            status: err.response.status,
+            message: err.response.data.message
+        });
+    });
 }
 
 

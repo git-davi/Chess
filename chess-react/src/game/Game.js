@@ -1,20 +1,23 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import Logout from './Logout';
-import TOKEN_KEY from '../token';
+import {AuthContext} from '../App';
+import {axiosAuthWrapper as axiosWrap} from './axiosAuthWrapper';
 
-import axios from 'axios';
 
 export default function Game() {
 
+    const context = useContext(AuthContext);
+
     function testApi() {
-        axios.get("/game", {
-            headers : {
-                'Authorization' : 'Bearer ' + localStorage.getItem(TOKEN_KEY) 
-            }
+
+        axiosWrap({
+            method: 'get',
+            url: '/game',
+            setAuth: context.setAuth
         })
-        .then((res) => console.log(res), 
-            (res) => console.log(res));
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
     }
 
     return (

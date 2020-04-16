@@ -5,9 +5,9 @@ export default function Alert({ response }) {
 
     return (
         <>
-        { response.type !== null && 
-            <div className={"alert alert-" +  (response.type === 'error' ? 'danger' : 'success')} role="alert">
-                {response.value}
+        { response.status !== null && 
+            <div className={"alert alert-" +  (response.status > 201 ? 'danger' : 'success')} role="alert">
+                {response.message}
             </div> }
         </>
     );

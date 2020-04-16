@@ -5,6 +5,7 @@ const router = express.Router();
 const tokenHandler = require('../controllers/tokenHandler');
 const gameController = require('../controllers/gameController');
 
+// this route must be authorized
 router.use(tokenHandler.extractToken);
 router.use(tokenHandler.verifyToken);
 router.use(tokenHandler.decodeToken);

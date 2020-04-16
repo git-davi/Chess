@@ -15,7 +15,7 @@ export default function Form() {
     const validPassRef = useRef();
 
     const [form, setForm] = useState('login');
-    const [response, setResponse] = useState({ type: null, value: null });
+    const [response, setResponse] = useState({ status: null, message: null });
 
     const context = useContext(AuthContext);
 
