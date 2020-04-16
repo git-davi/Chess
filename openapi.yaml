@@ -1,0 +1,92 @@
+openapi: 3.0.0
+info:
+  title: chess.unimore API
+  version: 0.0.0
+paths:
+  /auth/users/{username}:
+    get:
+      summary: Check if username exists
+      parameters:
+        - in: path
+          name: username
+          required: true
+          schema: 
+            type: string
+      responses:
+        '200':
+          description: User exists
+        '404':
+          description: User not found
+        
+  /auth/login:
+    post:
+      summary: Get authorization token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Login"
+      responses:
+        '200':
+          description: Login success with token in response body
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Token"
+        '401':
+          description: Wrong credentials
+        '500':
+          description: Server side error
+  
+  /auth/register:
+    post:
+      summary: Register a new user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Registration"
+      responses:
+        '201':
+          description: New user created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Token"
+        '409':
+          description: Username already existing
+        '500':
+          description: Server side error
+                  
+components:
+  schemas:
+    Login:
+      type: object
+      properties:
+        username: 
+          type: string
+        password:
+          type: string
+    Registration:
+      type: object
+      properties:
+        username: 
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+    Message:
+      type: object
+      properties:
+        message: 
+          type: string
+    Token:
+      type: object
+      properties:
+        message: 
+          type: string
+        token: 
+          type: string

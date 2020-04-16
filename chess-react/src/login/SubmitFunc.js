@@ -24,7 +24,7 @@ function request(url, data, setResponse, setAuth) {
 export function loginSubmit(event, setResponse, setAuth) {
     event.preventDefault();
 
-    request('/auth', {
+    request('/auth/login', {
         username: event.target.username.value,
         password: event.target.password.value
         }, setResponse, setAuth);

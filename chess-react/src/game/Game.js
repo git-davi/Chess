@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 
 import Logout from './Logout';
 import {AuthContext} from '../App';
-import {axiosAuthWrapper as axiosWrap} from './axiosAuthWrapper';
+import {axiosAuthWrapper as axiosAW} from './axiosAuthWrapper';
 
 
 export default function Game() {
@@ -11,13 +11,12 @@ export default function Game() {
 
     function testApi() {
 
-        axiosWrap({
+        axiosAW({
             method: 'get',
             url: '/game',
-            setAuth: context.setAuth
-        })
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err));
+        }, () => context.setAuth(false))
+        .then((res) => console.log(res.status))
+        .catch((err) => console.log(err.response.status));
     }
 
     return (

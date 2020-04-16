@@ -2,18 +2,14 @@ import axios from 'axios';
 import TOKEN_KEY from '../token';
 
 
-export function axiosAuthWrapper({method, url, params=undefined, data=undefined, setAuth}) {
-    return axios({
-        method: method,
-        url: url,
-        params: params,
-        data: data,
-        headers : { 'Authorization' : 'Bearer ' + localStorage.getItem(TOKEN_KEY) } 
-    })
+export function axiosAuthWrapper(config, action=undefined) {
+    config.headers = config.headers || {};
+    config.headers.Authorization = 'Bearer ' + localStorage.getItem(TOKEN_KEY);
+    
+    return axios(config)
     .catch((err) => {
         if (err.response.status === 401)
-            setAuth(false);
-        else 
-            throw err;
+            action();
+        throw err;
     });
 }
