@@ -2,7 +2,7 @@ import axios from 'axios';
 import TOKEN_KEY from '../token';
 
 
-export default function axiosAuthWrapper({method, url, params=undefined, data=undefined, setAuth}) {
+export function axiosAuthWrapper({method, url, params=undefined, data=undefined, setAuth}) {
     return axios({
         method: method,
         url: url,
