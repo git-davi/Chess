@@ -5,7 +5,7 @@ import Alert from './Alert';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
 
-import { validateForm, loginSubmit } from './SubmitFunc';
+import { validateForm, loginSubmit } from './util/submitFunc';
 import {AuthContext} from '../App'; 
 
 

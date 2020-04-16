@@ -10,6 +10,18 @@ module.exports.modelsGen = function* (games) {
     }
 }
 
+module.exports.getUserInfo = async (username) => {
+    const result = await UserModel.findOne({
+        attributes: ['username', 'elo'],
+        where : {
+            username: username
+        }
+    })
+    .catch(() => undefined );
+
+    return result;
+}
+
 
 module.exports.getUser = async (user, pass) => {
     const result = await UserModel.findOne({
@@ -18,7 +30,7 @@ module.exports.getUser = async (user, pass) => {
             password: pass
         }
     })
-    .catch(() => { return -1;} );
+    .catch(() => undefined );
 
     return result;
 }
@@ -37,9 +49,7 @@ module.exports.getGames = async (user) => {
 
 module.exports.existUser = async (username) => {
     const result = await UserModel.findByPk(username)
-    .catch(() => {
-        return undefined;
-    });
+    .catch(() => undefined);
 
     return result != undefined;
 }

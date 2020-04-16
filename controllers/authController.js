@@ -8,16 +8,12 @@ module.exports.checkUser = async (req, res) => {
     let exists = await dbop.existUser(req.params.username);
 
     if (exists) {
-        res
-        .status(200)
-        .json({
+        res.status(200).json({
             message: 'Username found'
         });
     }
     else {
-        res
-        .status(404)
-        .json({
+        res.status(404).json({
             message: 'Username not found'
         });
     }
@@ -29,28 +25,23 @@ module.exports.submitLogin = async (req, res) => {
     
     const user = await dbop.getUser(username, password);
 
-    if (user == -1) {
-        res
-        .status(500)
-        .json({
-            message: 'Server side error'
-        });
-    }
-    else if (user == undefined) {
-        res
-        .status(401)
-        .json({
-            message: 'Wrong username or password'
-        });
-    } 
-    else {
-        let token = tokenHandler.createToken(username);
-        res
-        .status(200)
-        .json({
-            message: 'Login Successfull',
-            token: token
-        });
+    switch (user) {
+        case undefined:
+            res.status(500).json({
+                message: 'Server side error'
+            });
+            break;
+        case null:
+            res.status(401).json({
+                message: 'Wrong username or password'
+            });
+            break;
+        default:
+            let token = tokenHandler.createToken(username);
+            res.status(200).json({
+                message: 'Login Successfull',
+                token: token
+            });
     }
 };
 
@@ -61,9 +52,7 @@ module.exports.submitRegistration = async (req, res) => {
     let exists = await dbop.existUser(username);
 
     if (exists) {
-        resres
-        .status(409)
-        .json({
+        res.status(409).json({
             message: 'Username already exists'
         });
         return;
@@ -72,17 +61,13 @@ module.exports.submitRegistration = async (req, res) => {
     let created = await dbop.createUser(username, password, email);
 
     if (created == undefined) {
-        res
-        .status(500)
-        .json({
+        res.status(500).json({
             message: 'Registration failed, retry later'
         })
     }
     else {
         let token = tokenHandler.createToken(username);
-        res
-        .status(201)
-        .json({
+        res.status(201).json({
             message: 'Registration Successfull',
             token: token
         });

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import TOKEN_KEY from '../token';
+import TOKEN_KEY from '../../token';
 
 
 function request(url, data, setResponse, setAuth) {

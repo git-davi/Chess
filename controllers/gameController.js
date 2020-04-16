@@ -3,6 +3,30 @@
 const tokenHandler = require('./tokenHandler');
 const queue = require('./utils/queue/Queue');
 const gamesList = require('./utils/game/GamesList');
+const dbop = require('./utils/db/operations');
+
+
+module.exports.getUserInfo = async (req, res) => {
+    const result = await dbop.getUserInfo(req.params.username);
+    switch (result) {
+        case null:
+            res.status(404).json({
+                message: 'User not found'
+            });
+            break;
+        case undefined:
+            res.status(500).json({
+                message: 'Server side error'
+            });
+            break;
+        default:
+            res.status(200).json({
+                username: result.username,
+                elo: result.elo
+            });
+    }
+};
+
 
 
 module.exports.index = function(req, res) {
