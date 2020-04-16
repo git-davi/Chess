@@ -16,6 +16,6 @@ export default function LogoutButton() {
 
 
     return (
-        <button class="btn btn-danger" onClick={logout}>&times;</button>
+        <button className="btn btn-danger" onClick={logout}>&times;</button>
     );
 }

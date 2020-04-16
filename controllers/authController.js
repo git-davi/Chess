@@ -4,6 +4,23 @@ const tokenHandler = require('./tokenHandler');
 const dbop = require('./utils/db/operations');
 
 
+module.exports.checkUser = async (req, res) => {
+    let exists = await dbop.existUser(req.params.username);
+
+    if (exists) {
+        res.json({
+            type: 'error',
+            value: 'Username already taken'
+        });
+    }
+    else {
+        res.json({
+            type: 'success',
+            value: 'Username valid'
+        });
+    }
+};
+
 
 module.exports.submitLogin = async (req, res) => {
     const {username, password} = req.body;

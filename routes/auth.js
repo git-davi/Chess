@@ -5,7 +5,9 @@ const router = express.Router();
 const authController = require('../controllers/authController');
 const tokenHandler = require('../controllers/tokenHandler');
 
-router.use(tokenHandler.hasToken);
+//router.use(tokenHandler.hasToken);
+
+router.get('/users/:username', authController.checkUser)
 
 router.post('/', authController.submitLogin);
 router.post('/register', authController.submitRegistration);

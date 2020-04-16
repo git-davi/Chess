@@ -11,9 +11,7 @@ function request(url, data, setResponse, setAuth) {
             setAuth(true);
         }
 
-    }, (err) => {
-        console.log(err);
-    })
+    }, (err) => console.log(err));
 }
 
 

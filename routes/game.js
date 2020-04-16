@@ -5,7 +5,7 @@ const router = express.Router();
 const tokenHandler = require('../controllers/tokenHandler');
 const gameController = require('../controllers/gameController');
 
-
+router.use(tokenHandler.extractToken);
 router.use(tokenHandler.verifyToken);
 router.use(tokenHandler.decodeToken);
 
