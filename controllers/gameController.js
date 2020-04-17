@@ -38,7 +38,27 @@ module.exports.getUserGames = async (req, res) => {
 }
 
 
-//-----------------------------OLD---PRE API-------------------------
+module.exports.startMatchmaking = async (req, res) => {
+
+    if(queue.hasTicket(res.locals.token)) {
+        // needed for consistency after page refresh.
+        queue.setNewResponse(res.locals.token.username, res);
+        return;
+    }
+
+    await queue.searchTicket(res.locals.token.username, res);
+};
+
+
+module.exports.stopMatchmaking = async (req, res) => {
+    queue.stopMatchmaking(res.locals.token);
+    res.status(200).json({
+        message: "Queue ticket deleted"
+    });
+};
+
+
+//-----------------------------OLD---PRE API-- MUST REMOVE-----------------------
 
 module.exports.index = function(req, res) {
     res.render('home', { 

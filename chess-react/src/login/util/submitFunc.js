@@ -36,8 +36,8 @@ export function validateForm(event, setResponse, setAuth, passRef, validPassRef)
 
     if (passRef.current.value !== validPassRef.current.value) {
         setResponse({
-            type: 'error',
-            value: 'Passwords must be equal'
+            status: '412',
+            message: 'Passwords must be equal'
         });
         return;
     }

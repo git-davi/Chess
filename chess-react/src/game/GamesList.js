@@ -1,28 +1,26 @@
 import React, { useContext, useEffect } from 'react';
 
 import {AuthContext} from '../App';
-import {UserContext} from './Game';
 import {axiosAuthWrapper as axiosAW} from './util/axiosAuthWrapper';
 
 
-export default function GamesList({ games, setGames }) {
+export default function GamesList({games, setGames}) {
 
     const authContext = useContext(AuthContext);
-    const userContext = useContext(UserContext);
 
     useEffect(() => {
         axiosAW({
             method: 'get',
-            url: '/game/user/'+userContext.user.username+'/games',
-        }, () => authContext.setAuth(false))
+            url: '/game/games',
+        }, authContext)
         .then((res) => setGames(res.data.games))
-        .catch((err) => console.log(err));
-    }, []);
+        .catch((err) => console.log(err.response));
+    }, [authContext, setGames]);
 
 
     return (
-        <div>
-            <h3 className="text-white">Games List</h3>
+        <div className="mt-4">
+            <h3>Games List</h3>
             {games.map((game) => 
                 <div key={game} className="alert alert-warning" role="alert">
                     Game : {game}

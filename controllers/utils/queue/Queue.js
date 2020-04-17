@@ -16,12 +16,14 @@ class Queue {
     }
 
 
-    _addTicket(token, game_uuid, res) {
+    async _addTicket(username, game_uuid, res) {
+        var userInfo = await dbop.getUserInfo(username);
+        // imposto la chiave come username -> un utente può fare solo una ricerca alla volta
         this.queue.set(
-            token.username, 
+            username, 
             new Ticket(
-                token.username,
-                token.elo,
+                userInfo.username,
+                userInfo.elo,
                 game_uuid,
                 res
             )    
@@ -35,8 +37,11 @@ class Queue {
 
 
     stopMatchmaking(token) {
-        gamesList.deleteGame(this.queue.get(token.username).game_uuid);
-        this._removeTicket(token.username);
+        let ticket = this.queue.get(token.username);
+        if (ticket) {
+            gamesList.deleteGame(ticket.game_uuid);
+            this._removeTicket(token.username);
+        }
     }
 
     hasTicket(token) {
@@ -44,9 +49,9 @@ class Queue {
     }
 
 
-    _existsOpponent(token) {
+    _existsOpponent(userInfo) {
         for (let [username, ticket] of this.queue) {
-            if(ticket.canPlay(token))
+            if(ticket.canPlay(userInfo))
                 return username;
         }
         return undefined;
@@ -63,35 +68,46 @@ class Queue {
     }
 
 
-    async searchTicket(token, res) {
-        var opponent = this._existsOpponent(token);
+    async searchTicket(username, res) {
+        var userInfo = await dbop.getUserInfo(username);
+        var opponent = this._existsOpponent(userInfo);
 
         if (opponent != undefined) {
             let ticket = this.queue.get(opponent);
             this._removeTicket(opponent);
             await this._createGameInstance(res, ticket.res, ticket.game_uuid);
-            gamesList.addToGame(ticket.game_uuid, token);
+            gamesList.addToGame(ticket.game_uuid, username);
             this._notifyGameReady(res, ticket.res, ticket.game_uuid);
         }
         else {
             let game_uuid = uuidv4();
-            this._addTicket(token, game_uuid, res);
-            gamesList.createGame(game_uuid, token);
+            this._addTicket(username, game_uuid, res);
+            gamesList.createGame(game_uuid, username);
         }
     }
 
     
-    _notifyGameReady(res1, res2, game_uuid) {        
-        tokenHandler.setToken(res1, tokenHandler.addToToken(res1.locals.token, game_uuid));
-        res1.send({ game_uuid: game_uuid });
+    _notifyGameReady(res1, res2, game_uuid) {  
+        //tokenHandler.setToken(res1, tokenHandler.addToToken(res1.locals.token, game_uuid));
+        res1.status(201).json({
+            message: "Game found",
+            game_uuid: game_uuid
+        });
 
-        tokenHandler.setToken(res2, tokenHandler.addToToken(res2.locals.token, game_uuid));
-        res2.send({ game_uuid: game_uuid });
+        //tokenHandler.setToken(res2, tokenHandler.addToToken(res2.locals.token, game_uuid));
+        res2.status(201).json({
+            message: "Game found",
+            game_uuid: game_uuid
+        });
     }
 
     
-    setNewResponse(token, res) {
-        this.queue.get(token.username).res = res;
+    setNewResponse(username, res) {
+        let ticket = this.queue.get(username);
+        ticket.res.status(409).json({
+            message: 'Replaced by newer request'
+        });
+        this.queue.get(username).res = res;
     }
 }
 

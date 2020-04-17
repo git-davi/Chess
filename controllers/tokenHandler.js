@@ -6,11 +6,15 @@ const secretKey = 'SuperSecretChessSpecialKey';
 
 
 module.exports.extractToken = (req, res, next) => {
+    if (req.headers.authorization === undefined) {
+        res.status(401).json({
+            message: 'You need a token'
+        });
+        return;
+    }
     const token = req.headers.authorization.split(" ")[1];
-    if (token == undefined) {
-        res
-        .status(401)
-        .send({
+    if (token == null) {
+        res.status(401).json({
             message: 'You need a token'
         });
         return;
@@ -27,9 +31,7 @@ module.exports.verifyToken = (req, res, next) => {
         next();
     }
     catch (err) {
-        res
-        .status(401)
-        .json({
+        res.status(401).json({
             message: 'Invalid token'
         });
     }

@@ -8,12 +8,12 @@ class GamesList {
     }
     
 
-    createGame(game_uuid, token) {
+    createGame(game_uuid, username) {
         this.games.set(
             game_uuid,
             new Game(
                 game_uuid,
-                token.username
+                username
             )
         );
     }
@@ -24,8 +24,8 @@ class GamesList {
     }
 
 
-    addToGame(game_uuid, token) {
-        this.games.get(game_uuid).addPlayer(token.username);
+    addToGame(game_uuid, username) {
+        this.games.get(game_uuid).addPlayer(username);
     }
 
     getGame(game_uuid) {

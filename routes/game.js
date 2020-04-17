@@ -12,7 +12,11 @@ router.use(tokenHandler.decodeToken);
 
 
 router.get('/user/:username', gameController.getUserInfo);
-router.get('/user/:username/games', gameController.getUserGames);
+router.get('/games', gameController.getUserGames);
+router.get('/matchmaking/start', gameController.startMatchmaking);
+router.get('/matchmaking/stop', gameController.stopMatchmaking);
+
+// ------- old --- pre api -----
 
 router.get('/', gameController.index);
 router.get('/play/:game_uuid', gameController.isMyGameMiddleware);

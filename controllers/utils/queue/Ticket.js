@@ -13,8 +13,8 @@ class Ticket {
         this.res = res;
     }
 
-    canPlay(token) {
-        return Math.abs(this.elo - token.elo) < 100;
+    canPlay(userInfo) {
+        return Math.abs(this.elo - userInfo.elo) < 100;
     }
 }
 
