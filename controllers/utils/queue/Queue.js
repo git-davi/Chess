@@ -19,7 +19,7 @@ class Queue {
     async _addTicket(userInfo, game_uuid, res) {
         // imposto la chiave come username -> un utente può fare solo una ricerca alla volta
         this.queue.set(
-            username, 
+            userInfo.username, 
             new Ticket(
                 userInfo.username,
                 userInfo.elo,
