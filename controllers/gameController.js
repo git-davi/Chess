@@ -28,6 +28,17 @@ module.exports.getUserInfo = async (req, res) => {
 };
 
 
+module.exports.getUserGames = async (req, res) => {
+    const result = await dbop.getGames(res.locals.token.username);
+    var games = result.map(e => e.game_uuid);
+
+    res.status(200).json({
+        games: games
+    });
+}
+
+
+//-----------------------------OLD---PRE API-------------------------
 
 module.exports.index = function(req, res) {
     res.render('home', { 

@@ -12,6 +12,7 @@ router.use(tokenHandler.decodeToken);
 
 
 router.get('/user/:username', gameController.getUserInfo);
+router.get('/user/:username/games', gameController.getUserGames);
 
 router.get('/', gameController.index);
 router.get('/play/:game_uuid', gameController.isMyGameMiddleware);

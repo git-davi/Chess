@@ -3,7 +3,7 @@ import React, { useState, createContext } from 'react';
 import Login from './login/Login';
 import Game from './game/Game';
 
-import TOKEN_KEY from './token.js';
+import {TOKEN_KEY} from './storageKeys.js';
 
 export const AuthContext = createContext();
 

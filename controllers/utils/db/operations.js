@@ -35,12 +35,13 @@ module.exports.getUser = async (user, pass) => {
     return result;
 }
 
-module.exports.getGames = async (user) => {
+module.exports.getGames = async (username) => {
+    const user = await UserModel.findByPk(username)
     let p1Games = await user.getGamesAsPlayer1().catch(() => {
-            return undefined; 
+            return []; 
     });
     let p2Games = await user.getGamesAsPlayer2().catch(() => {
-            return undefined; 
+            return []; 
     });
     
     return p1Games.concat(p2Games);
