@@ -10,7 +10,7 @@ export default function GamesHandler() {
     
     return (
         <div className="container mt-5">
-            <SearchGame />
+            <SearchGame games={games} setGames={setGames}/>
             <GamesList games={games} setGames={setGames}/>
         </div>
     );
