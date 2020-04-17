@@ -47,7 +47,7 @@ $ mysql -u chess -p chess_db < database/dump.sql
 
 If you want to modify a model then you should apply changes to db :
 ```shell
-$ node models/migrations.js
+$ node controllers/utils/db/make_migrations.js
 ```
 
 ## Start
@@ -79,3 +79,7 @@ Prompt will ask to use another port (choose Y)
 
 In root folder you will find openapi.yaml specification file.  
 Just upload it in [swagger editor](https://editor.swagger.io/)
+
+## Resources
+
+Some glyphs come from [https://www.toptal.com/designers/htmlarrows/symbols/](https://www.toptal.com/designers/htmlarrows/symbols/)

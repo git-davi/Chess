@@ -45,14 +45,14 @@ export default function SearchGame({ games, setGames }) {
 
 
     return (
-        <div className="d-flex m-2 align-items-start">
+        <div className="container d-flex m-2">
             <div className="mr-auto">
                 { searchState ?
-                    <button className="btn btn-danger" type="button" onClick={() => stopSearch()}>
+                    <button className="btn btn-lg btn-danger" type="button" onClick={() => stopSearch()}>
                         Stop Search &times;
                     </button>
                     :
-                    <button className="btn btn-success" type="button" onClick={() => startSearch()}>
+                    <button className="btn btn-lg btn-success" type="button" onClick={() => startSearch()}>
                         Search a New Game &hearts;
                     </button>
                 }
