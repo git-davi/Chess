@@ -16,8 +16,7 @@ class Queue {
     }
 
 
-    async _addTicket(username, game_uuid, res) {
-        var userInfo = await dbop.getUserInfo(username);
+    async _addTicket(userInfo, game_uuid, res) {
         // imposto la chiave come username -> un utente può fare solo una ricerca alla volta
         this.queue.set(
             username, 
@@ -81,7 +80,7 @@ class Queue {
         }
         else {
             let game_uuid = uuidv4();
-            this._addTicket(username, game_uuid, res);
+            this._addTicket(userInfo, game_uuid, res);
             gamesList.createGame(game_uuid, username);
         }
     }
