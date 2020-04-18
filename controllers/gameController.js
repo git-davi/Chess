@@ -38,18 +38,21 @@ module.exports.getUserGames = async (req, res) => {
 }
 
 
-module.exports.startMatchmaking = async (req, res) => {
+module.exports.startMatchmaking = (req, res) => {
 
     if(queue.hasTicket(res.locals.token)) {
-        // needed for consistency after page refresh.
-        queue.setNewResponse(res.locals.token.username, res);
+        // needed for consistency after page refresh. 
+        // Browser aborts previous request
+        queue.setNewResponse(res.locals.token.username, res);        
         return;
     }
 
-    await queue.searchTicket(res.locals.token.username, res);
+    queue.searchTicket(res.locals.token.username, res);
 };
 
 
+// MUST be async. Being a promise will increase the chance that cannot
+// precede startMatchmaking from the same user (also this has a lower priority) 
 module.exports.stopMatchmaking = async (req, res) => {
     queue.stopMatchmaking(res.locals.token);
     res.status(200).json({

@@ -40,11 +40,26 @@ class Queue {
         if (ticket) {
             gamesList.deleteGame(ticket.game_uuid);
             this._removeTicket(token.username);
+
+            // without responding the client will get really slow!
+            ticket.res.status(404).json({
+                message: "Your queue ticket has been deleted"
+            });
         }
     }
 
     hasTicket(token) {
         return this.queue.get(token.username) != undefined;
+    }
+
+    setNewResponse(username, res) {
+        let ticket = this.queue.get(username);
+
+        // again without responding client will get slow
+        ticket.res.status(409).json({
+            message: 'Replaced by newer request'
+        });
+        ticket.res = res;
     }
 
 
@@ -98,15 +113,6 @@ class Queue {
             message: "Game found",
             game_uuid: game_uuid
         });
-    }
-
-    
-    setNewResponse(username, res) {
-        let ticket = this.queue.get(username);
-        ticket.res.status(409).json({
-            message: 'Replaced by newer request'
-        });
-        this.queue.get(username).res = res;
     }
 }
 
