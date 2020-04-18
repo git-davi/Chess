@@ -29,7 +29,16 @@ module.exports.getUserInfo = async (req, res) => {
 
 
 module.exports.getUserGames = async (req, res) => {
-    const result = await dbop.getGames(res.locals.token.username);
+    const result = await dbop.getGames(res.locals.token.username)
+    .catch(() => -1);
+    
+    if (result === -1) {
+        res.status(401).json({
+            message: 'You need to register again, your account has been deleted'
+        });
+        return;
+    }
+
     var games = result.map(e => e.game_uuid);
 
     res.status(200).json({
@@ -78,6 +87,27 @@ module.exports.stopMatchmaking = async (req, res) => {
     );
     res.status(200).json({
         message: "Queue ticket deleted"
+    });
+};
+
+
+module.exports.getGameInfo = (req, res) => {
+    let game = gamesList.getGame(req.params.game_uuid);
+    if (game === undefined) {
+        res.status(403).json({
+            message: 'You cannot access this resource, probably doesn\'t exists anymore'
+        });
+        return;
+    }
+    if(!game.hasPlayer(res.locals.token.username) ) {
+        res.status(403).json({
+            message: 'You cannot access this resource'
+        });
+        return;
+    }
+
+    res.status(200).json({
+        game: game
     });
 };
 

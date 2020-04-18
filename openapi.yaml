@@ -137,6 +137,30 @@ paths:
       responses:
         '200':
           description: User removed from search list
+          
+  /game/info/{game_uuid}:
+    get:
+      tags:
+        - Game Api
+      summary: Fetch games info
+      description: Fetch game info from game session. This response could be extended during development (adding game status)
+      security: 
+        - bearerAuth: []
+      parameters:
+      - in: path
+        name: game_uuid
+        required: true
+        schema: 
+          type: string
+      responses:
+        '200':
+          description: Game found and infos fetched
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameInfo'
+        '403':
+          description: You do not have rights for the resource or the resource could not exists anymore.
 
 components:
   schemas:
@@ -186,6 +210,15 @@ components:
       type: object
       properties:
         game_uuid:
+          type: string
+    GameInfo:
+      type: object
+      properties:
+        game_uuid:
+          type: string
+        white:
+          type: string
+        black:
           type: string
 
   securitySchemes:

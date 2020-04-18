@@ -37,12 +37,22 @@ module.exports.getUser = async (user, pass) => {
 
 module.exports.getGames = async (username) => {
     const user = await UserModel.findByPk(username)
-    let p1Games = await user.getGamesAsPlayer1().catch(() => {
-            return []; 
+    .then((res) => {
+        if (res === undefined)
+            throw new Error();
+        return res;
+    })
+    .catch((err) => {
+        throw err;
     });
-    let p2Games = await user.getGamesAsPlayer2().catch(() => {
-            return []; 
-    });
+
+    let p1Games = await user.getGamesAsPlayer1()
+    .then((res) => res == undefined? [] : res)
+    .catch(() => []);
+    
+    let p2Games = await user.getGamesAsPlayer2()
+    .then((res) => res == undefined? [] : res)
+    .catch(() => []);
     
     return p1Games.concat(p2Games);
 };
