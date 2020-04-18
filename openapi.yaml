@@ -2,9 +2,13 @@ openapi: 3.0.0
 info:
   title: chess.unimore API
   version: 0.0.0
+  
 paths:
+
   /auth/users/{username}:
     get:
+      tags:
+        - Authentication
       summary: Check if username exists
       parameters:
         - in: path
@@ -20,6 +24,8 @@ paths:
         
   /auth/login:
     post:
+      tags:
+          - Authentication
       summary: Get authorization token.
       requestBody:
         required: true
@@ -36,11 +42,11 @@ paths:
                 $ref: "#/components/schemas/Token"
         '401':
           description: Wrong credentials
-        '500':
-          description: Server side error
   
   /auth/register:
     post:
+      tags:
+        - Authentication
       summary: Register a new user.
       requestBody:
         required: true
@@ -57,9 +63,81 @@ paths:
                 $ref: "#/components/schemas/Token"
         '409':
           description: Username already existing
-        '500':
-          description: Server side error
-                  
+
+
+  /game/users/{username}:
+    get:
+      tags:
+        - Game Api
+      summary: Retrieve username info
+      security: 
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: username
+          required: true
+          schema: 
+            type: string
+      responses:
+        '200':
+          description: Infos successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfo'
+        '401' :
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: User not found
+          
+  /game/games:
+    get:
+      tags:
+        - Game Api
+      summary: Get user games list
+      description: Fetch the game uuid list based on token identity
+      security: 
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List retrieved with success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GamesList'
+  
+  /game/matchmaking/start:
+    get:
+      tags:
+        - Game Api
+      summary: Search a Game
+      description: Place user in matchmaking queue, response could take time 
+      security: 
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Player found and game created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameFound'
+        '404':
+          description: You have been remove by search queue
+        '409':
+          description: Your request has been replaced by a new one
+
+  /game/matchmaking/stop:
+    get:
+      tags:
+        - Game Api
+      summary: Stop game search
+      description: Remove from game search based on token identity
+      security: 
+        - bearerAuth: []
+      responses:
+        '200':
+          description: User removed from search list
+
 components:
   schemas:
     Login:
@@ -90,3 +168,32 @@ components:
           type: string
         token: 
           type: string
+    UserInfo:
+      type: object
+      properties:
+        username:
+          type: string
+        elo:
+          type: integer
+    GamesList:
+      type: object
+      properties:
+        games:
+          type: array
+          items: 
+            type: string
+    GameFound:
+      type: object
+      properties:
+        game_uuid:
+          type: string
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid 

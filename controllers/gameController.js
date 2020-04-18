@@ -38,23 +38,44 @@ module.exports.getUserGames = async (req, res) => {
 }
 
 
+// In this methods I pass a callback function beacause
+// I want all the response logic in this page
 module.exports.startMatchmaking = (req, res) => {
 
     if(queue.hasTicket(res.locals.token)) {
         // needed for consistency after page refresh. 
         // Browser aborts previous request
-        queue.setNewResponse(res.locals.token.username, res);        
+        queue.setNewResponse(
+            res.locals.token.username, 
+            res, 
+            (res) => res.status(409).json({
+                message: 'Replaced by newer request'
+            })
+        );        
         return;
     }
 
-    queue.searchTicket(res.locals.token.username, res);
+    queue.searchTicket(
+        res.locals.token.username, 
+        res,
+        (res, game_uuid) => res.status(201).json({
+            message: "Game found",
+            game_uuid: game_uuid
+        })
+    );
 };
 
 
 // MUST be async. Being a promise will increase the chance that cannot
 // precede startMatchmaking from the same user (also this has a lower priority) 
 module.exports.stopMatchmaking = async (req, res) => {
-    queue.stopMatchmaking(res.locals.token);
+    // this response will go to startMatchmaking request
+    queue.stopMatchmaking(
+        res.locals.token, 
+        (res) => res.status(404).json({
+            message: "Your queue ticket has been deleted"
+        }) 
+    );
     res.status(200).json({
         message: "Queue ticket deleted"
     });

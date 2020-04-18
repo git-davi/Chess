@@ -35,16 +35,14 @@ class Queue {
     }
 
 
-    stopMatchmaking(token) {
+    stopMatchmaking(token, stopResponseCallback) {
         let ticket = this.queue.get(token.username);
         if (ticket) {
             gamesList.deleteGame(ticket.game_uuid);
             this._removeTicket(token.username);
 
-            // without responding the client will get really slow!
-            ticket.res.status(404).json({
-                message: "Your queue ticket has been deleted"
-            });
+            // without response, the client will get really slow!
+            stopResponseCallback(ticket.res);
         }
     }
 
@@ -52,13 +50,11 @@ class Queue {
         return this.queue.get(token.username) != undefined;
     }
 
-    setNewResponse(username, res) {
+    setNewResponse(username, res, existingResponseCallback) {
         let ticket = this.queue.get(username);
 
-        // again without responding client will get slow
-        ticket.res.status(409).json({
-            message: 'Replaced by newer request'
-        });
+        // again without response client will get slow
+        existingResponseCallback(ticket.res);
         ticket.res = res;
     }
 
@@ -82,7 +78,7 @@ class Queue {
     }
 
 
-    async searchTicket(username, res) {
+    async searchTicket(username, res, notifyCallback) {
         var userInfo = await dbop.getUserInfo(username);
         var opponent = this._existsOpponent(userInfo);
 
@@ -91,7 +87,7 @@ class Queue {
             this._removeTicket(opponent);
             await this._createGameInstance(res, ticket.res, ticket.game_uuid);
             gamesList.addToGame(ticket.game_uuid, username);
-            this._notifyGameReady(res, ticket.res, ticket.game_uuid);
+            this._notifyGameReady(res, ticket.res, ticket.game_uuid, notifyCallback);
         }
         else {
             let game_uuid = uuidv4();
@@ -101,18 +97,10 @@ class Queue {
     }
 
     
-    _notifyGameReady(res1, res2, game_uuid) {  
+    _notifyGameReady(res1, res2, game_uuid, notifyCallback) {  
         //tokenHandler.setToken(res1, tokenHandler.addToToken(res1.locals.token, game_uuid));
-        res1.status(201).json({
-            message: "Game found",
-            game_uuid: game_uuid
-        });
-
-        //tokenHandler.setToken(res2, tokenHandler.addToToken(res2.locals.token, game_uuid));
-        res2.status(201).json({
-            message: "Game found",
-            game_uuid: game_uuid
-        });
+        notifyCallback(res1, game_uuid);
+        notifyCallback(res2, game_uuid);
     }
 }
 
