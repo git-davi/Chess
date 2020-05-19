@@ -1,13 +1,15 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { Redirect, Link, useParams } from 'react-router-dom';
 
-import io from "socket.io-client";
-
 import PlayGame from './PlayGame';
 
 import { axiosAuthWrapper as axioAW } from '../util/axiosAuthWrapper';
 import { AuthContext } from '../../App';
+import { TOKEN_KEY } from '../../storageKeys';
 
+import io from 'socket.io-client';
+
+const socket = io();
 
 export default function GameRoom() {
 
@@ -16,16 +18,17 @@ export default function GameRoom() {
     const [forbidden, setForbidden ] = useState(false);
     const [white, setWhite] = useState();
     const [black, setBlack] = useState();
+    
 
-
+    // connect to the game channel
     useEffect(() => {
-        const socket = io();
-        console.log(socket);
-        socket.on(game_uuid, data => {
-            console.log(data);
+        socket.emit('joinGameRoom', {
+            game_uuid: game_uuid,
+            token: localStorage.getItem(TOKEN_KEY)
         });
     }, [game_uuid]);
 
+    
     // on mount check if this is my game
     useEffect(() => {
         axioAW({
@@ -63,7 +66,7 @@ export default function GameRoom() {
                         </button>
                     </Link>
                 </div>
-                <PlayGame />
+                <PlayGame socket={socket} game_uuid={game_uuid} />
             </div>
         </div>)
     );
