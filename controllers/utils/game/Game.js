@@ -1,11 +1,18 @@
 'use strict';
-const io = require('../webSocket');
+const io = require('../../webSocket').io;
 // un game è identificato da un uuid
 
 class Game {
     constructor(game_uuid, username) {
         this.game_uuid = game_uuid;
         this._assignColor(username);
+
+        io.on('connection', (socket) => {
+            socket.join(game_uuid);
+            console.log('joined room ' + game_uuid);
+        });
+
+        io.to(game_uuid).emit('welcome to the channel ' + game_uuid);
     }
 
     _assignColor(username) {

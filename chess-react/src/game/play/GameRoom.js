@@ -1,10 +1,13 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { Redirect, Link, useParams } from 'react-router-dom';
 
+import io from "socket.io-client";
+
 import PlayGame from './PlayGame';
 
 import { axiosAuthWrapper as axioAW } from '../util/axiosAuthWrapper';
 import { AuthContext } from '../../App';
+
 
 export default function GameRoom() {
 
@@ -14,6 +17,14 @@ export default function GameRoom() {
     const [white, setWhite] = useState();
     const [black, setBlack] = useState();
 
+
+    useEffect(() => {
+        const socket = io();
+        console.log(socket);
+        socket.on(game_uuid, data => {
+            console.log(data);
+        });
+    }, [game_uuid]);
 
     // on mount check if this is my game
     useEffect(() => {
