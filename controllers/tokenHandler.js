@@ -38,13 +38,13 @@ module.exports.verifyToken = (req, res, next) => {
 };
 
 
-module.exports.isValidToken = (token) => {
+module.exports.validateAndDecodeToken = (token) => {
     try {
         jwt.verify(token, secretKey);
-        return true;
+        return jwt.decode(res.locals.tokenString);
     }
     catch (err) {
-        return false;
+        return null;
     }
 };
 

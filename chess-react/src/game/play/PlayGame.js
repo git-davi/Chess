@@ -1,14 +1,25 @@
 import React, { useEffect, useState } from 'react';
+import { axiosAuthWrapper as axiosAW } from '../util/axiosAuthWrapper';
+
+//import { AuthContext } from '../../App';
 
 export default function PlayGame({ socket, game_uuid }) {
 
-    const [chessboard, setChessboard] = useState(null); 
+    const [chessboard, setChessboard] = useState(); 
+
     useEffect(() => {
-        // fetch the chessboard with axiosAW from server
-    }, [chessboard]);
+        axiosAW({
+            method: 'get',
+            url: '/game/info/state/' + game_uuid
+        })
+        .then((res) => setChessboard(res.data.chessboard))
+        .catch(() => console.log('failed to fetch game state'));
+    }, [game_uuid]);
+
 
     useEffect(() => {
         socket.on(game_uuid, (chessboard) => {
+            // print for testing
             console.log(chessboard);
             setChessboard(chessboard)
         })
@@ -16,13 +27,12 @@ export default function PlayGame({ socket, game_uuid }) {
 
 
     function moveEvent() {
-        let exampleChessboard = 'ciao';
+        let exampleChessboard = new Date();
         socket.emit('move', {
             game_uuid: game_uuid,
             chessboard: exampleChessboard
         });
-        // here post the chessboard to 
-        // server with axiosAW (for persistance)
+
         setChessboard(exampleChessboard);
     }
 

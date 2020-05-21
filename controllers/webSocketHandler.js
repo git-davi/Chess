@@ -1,3 +1,6 @@
+const tokenHandler = require('./tokenHandler');
+const gamesList = require('./utils/game/GamesList');
+
 
 module.exports = function(io) {
     io.on('connection', (socket) => {
@@ -8,18 +11,16 @@ module.exports = function(io) {
 
 // join al canale della partita
 function joinGameRoom(socket, data) {
-    console.log(data);
-    /*
-    data = {
-        gameuuid, token
-    }
-    */
+    //console.log(data);
+    
+    const { gameuuid, token } = data;
 
-    /*
-    data = deve contenere auth token e game_uuid
-    se auth token è valido e la partita è di quell'utente allora può joinare 
-    */
-
+    let decoded = tokenHandler.validateAndDecodeToken(token);
+    if (decoded === null)
+        return;
+    
+    if (!gamesList.getGame(game_uuid).hasPlayer(decoded.username))
+        return;
 
     // add client to room
     socket.join(data.game_uuid);
@@ -33,6 +34,9 @@ function move(socket, data) {
         gameuuid, chessboard
     }
     */
+
+    // update db state chessboard
+    gamesList.setGameState(data.game_uuid, data.chessboard);
 
     // invio la mossa agli altri giocatori
     socket.broadcast.emit(data.game_uuid, data.chessboard);

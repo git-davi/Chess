@@ -18,7 +18,7 @@ export default function GameRoom() {
     const [forbidden, setForbidden ] = useState(false);
     const [white, setWhite] = useState();
     const [black, setBlack] = useState();
-    
+
 
     // connect to the game channel
     useEffect(() => {
@@ -33,11 +33,11 @@ export default function GameRoom() {
     useEffect(() => {
         axioAW({
             method: 'get',
-            url: '/game/info/'+game_uuid
+            url: '/game/info/players/'+game_uuid
         }, authContext)
         .then((res) => {
-            setWhite(res.data.game.white);
-            setBlack(res.data.game.black);
+            setWhite(res.data.white);
+            setBlack(res.data.black);
         })
         .catch((err) => {
             if(err.response !== undefined && err.response.status === 403)
