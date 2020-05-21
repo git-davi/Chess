@@ -1,9 +1,7 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { axiosAuthWrapper as axiosAW } from '../util/axiosAuthWrapper';
 
 import parseJwt from '../util/parseJwt';
-//import { AuthContext } from '../../App';
-
 import {TOKEN_KEY} from '../../storageKeys';
 
 
@@ -11,8 +9,7 @@ export default function PlayGame({ socket, game_uuid }) {
     
     const [chessboard, setChessboard] = useState();
     const [myTurn, setMyTurn] = useState();
-
-    const username = useRef(parseJwt(localStorage.getItem(TOKEN_KEY)).username);
+    const username = useState(parseJwt(localStorage.getItem(TOKEN_KEY)).username)[0];
 
 
     useEffect(() => {
@@ -30,9 +27,8 @@ export default function PlayGame({ socket, game_uuid }) {
 
     useEffect(() => {
         socket.on(game_uuid, (chessboard) => {
-            // print for testing
-            console.log(chessboard);
             setChessboard(chessboard);
+            setMyTurn(true);
         })
     }, [game_uuid, chessboard, socket]);
 
@@ -48,7 +44,11 @@ export default function PlayGame({ socket, game_uuid }) {
         setMyTurn(false);
     }
 
+    console.log('----------------------------------------------');
     console.log('Is my turn : '+ myTurn);
+    console.log('chessboard value : ' + chessboard);
+    console.log('----------------------------------------------');
+
 
     return (
         <div className="container">
