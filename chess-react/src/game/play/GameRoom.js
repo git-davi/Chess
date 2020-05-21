@@ -33,7 +33,7 @@ export default function GameRoom() {
     useEffect(() => {
         axioAW({
             method: 'get',
-            url: '/game/info/players/'+game_uuid
+            url: '/game/info/players/' + game_uuid
         }, authContext)
         .then((res) => {
             setWhite(res.data.white);

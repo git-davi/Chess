@@ -3,6 +3,7 @@
 const crypto = require('crypto');
 const UserModel = require('../../../models/UserModel');
 const GameModel = require('../../../models/GameModel');
+const Game = require('./Game');
 
 
 module.exports.modelsGen = function* (games) {
@@ -47,16 +48,40 @@ module.exports.getGames = async (username) => {
         throw err;
     });
 
-    let p1Games = await user.getGamesAsPlayer1()
+    let p1Games = await user.getGamesAsWhite()
     .then((res) => res == undefined? [] : res)
     .catch(() => []);
     
-    let p2Games = await user.getGamesAsPlayer2()
+    let p2Games = await user.getGamesAsBlack()
     .then((res) => res == undefined? [] : res)
     .catch(() => []);
     
     return p1Games.concat(p2Games);
 };
+
+
+
+module.exports.getGame = async (game_uuid) => {
+    const result = await GameModel.findByPk(game_uuid)
+    .catch(() => null);
+
+    try {
+        return new Game(result);
+    }
+    catch (err) {
+        return undefined;
+    }
+}
+
+
+module.exports.setGameState = (game_uuid, turn, chessboard) => {
+    GameModel.update({
+        turn: turn,
+        chessboard: chessboard
+    }, {
+        where: { game_uuid: game_uuid }
+    });
+}
 
 
 module.exports.existUser = async (username) => {
@@ -81,8 +106,10 @@ module.exports.createUser = async (user, pass, email) => {
 module.exports.createGame = async (game_uuid, player_1, player_2) => {
     return await GameModel.create({
         game_uuid: game_uuid,
-        player_1: player_1,
-        player_2: player_2
+        white: player_1,
+        black: player_2,
+        turn: player_1,
+        chessboard: 'initial state to be defined'
     }).catch(() => {
         return undefined;
     });

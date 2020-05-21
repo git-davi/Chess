@@ -16,7 +16,7 @@ router.get('/games', gameController.getUserGames);
 router.get('/matchmaking/start', gameController.startMatchmaking);
 router.get('/matchmaking/stop', gameController.stopMatchmaking);
 router.get('/info/players/:game_uuid', gameController.getGamePlayers);
-router.get('/info/state/:game_uuid', gameController.getChessboard);
+router.get('/info/state/:game_uuid', gameController.getGameState);
 
 // ------- old --- pre api -----
 

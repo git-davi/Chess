@@ -1,5 +1,5 @@
 const tokenHandler = require('./tokenHandler');
-const gamesList = require('./utils/game/GamesList');
+const dbop = require('./utils/db/operations');
 
 
 module.exports = function(io) {
@@ -10,16 +10,17 @@ module.exports = function(io) {
 }
 
 // join al canale della partita
-function joinGameRoom(socket, data) {
+async function joinGameRoom(socket, data) {
     //console.log(data);
     
-    const { gameuuid, token } = data;
+    const { game_uuid, token } = data;
 
     let decoded = tokenHandler.validateAndDecodeToken(token);
     if (decoded === null)
         return;
     
-    if (!gamesList.getGame(game_uuid).hasPlayer(decoded.username))
+    let game = await dbop.getGame(game_uuid);
+    if (game !== undefined && !game.hasPlayer(decoded.username))
         return;
 
     // add client to room
@@ -31,12 +32,14 @@ function joinGameRoom(socket, data) {
 function move(socket, data) {
     /*
     data = {
-        gameuuid, chessboard
+        gameuuid,
+        chessboard,
+        turn
     }
     */
 
     // update db state chessboard
-    gamesList.setGameState(data.game_uuid, data.chessboard);
+    dbop.setGameState(data.game_uuid, data.turn, data.chessboard);
 
     // invio la mossa agli altri giocatori
     socket.broadcast.emit(data.game_uuid, data.chessboard);

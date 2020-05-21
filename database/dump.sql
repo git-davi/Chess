@@ -24,15 +24,17 @@ DROP TABLE IF EXISTS `games`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `games` (
   `game_uuid` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `turn` varchar(255) DEFAULT NULL,
+  `chessboard` varchar(255) DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
-  `player_1` varchar(255) DEFAULT NULL,
-  `player_2` varchar(255) DEFAULT NULL,
+  `white` varchar(255) DEFAULT NULL,
+  `black` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`game_uuid`),
-  KEY `player_1` (`player_1`),
-  KEY `player_2` (`player_2`),
-  CONSTRAINT `games_ibfk_1` FOREIGN KEY (`player_1`) REFERENCES `users` (`username`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `games_ibfk_2` FOREIGN KEY (`player_2`) REFERENCES `users` (`username`) ON DELETE SET NULL ON UPDATE CASCADE
+  KEY `white` (`white`),
+  KEY `black` (`black`),
+  CONSTRAINT `games_ibfk_1` FOREIGN KEY (`white`) REFERENCES `users` (`username`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `games_ibfk_2` FOREIGN KEY (`black`) REFERENCES `users` (`username`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -81,4 +83,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-17 20:40:13
+-- Dump completed on 2020-05-21 14:33:12

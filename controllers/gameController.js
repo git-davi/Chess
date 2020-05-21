@@ -1,8 +1,6 @@
 'use strict';
 
-const tokenHandler = require('./tokenHandler');
 const queue = require('./utils/queue/Queue');
-const gamesList = require('./utils/game/GamesList');
 const dbop = require('./utils/db/operations');
 
 
@@ -91,8 +89,8 @@ module.exports.stopMatchmaking = async (req, res) => {
 };
 
 
-module.exports.getGamePlayers = (req, res) => {
-    let game = gamesList.getGame(req.params.game_uuid);
+module.exports.getGamePlayers = async (req, res) => {
+    let game = await dbop.getGame(req.params.game_uuid);
     if (game === undefined) {
         res.status(403).json({
             message: 'You cannot access this resource, probably doesn\'t exists anymore'
@@ -113,8 +111,8 @@ module.exports.getGamePlayers = (req, res) => {
 };
 
 
-module.exports.getChessboard = (req, res) => {
-    let game = gamesList.getGame(req.params.game_uuid);
+module.exports.getGameState = async (req, res) => {
+    let game = await dbop.getGame(req.params.game_uuid);
     if (game === undefined) {
         res.status(403).json({
             message: 'You cannot access this resource, probably doesn\'t exists anymore'
@@ -129,11 +127,15 @@ module.exports.getChessboard = (req, res) => {
     }
 
     res.status(201).json({
+        turn: game.turn,
         chessboard: game.chessboard
     });
 }
 
 //-----------------------------OLD---PRE API-- MUST REMOVE-----------------------
+
+
+var gamesList = null;
 
 module.exports.index = function(req, res) {
     res.render('home', { 

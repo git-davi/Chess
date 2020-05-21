@@ -2,9 +2,8 @@
 
 const { v4:uuidv4 } = require('uuid');
 
-const tokenHandler = require('../../tokenHandler');
+
 const Ticket = require('./Ticket');
-const gamesList = require('../game/GamesList');
 const dbop = require('../db/operations');
 
 
@@ -86,14 +85,10 @@ class Queue {
             let ticket = this.queue.get(opponent);
             this._removeTicket(opponent);
             await this._createGameInstance(res, ticket.res, ticket.game_uuid);
-            gamesList.addToGame(ticket.game_uuid, username);
             this._notifyGameReady(res, ticket.res, ticket.game_uuid, notifyCallback);
         }
-        else {
-            let game_uuid = uuidv4();
-            this._addTicket(userInfo, game_uuid, res);
-            gamesList.createGame(game_uuid, username);
-        }
+        else
+            this._addTicket(userInfo, uuidv4(), res);
     }
 
     

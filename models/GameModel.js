@@ -9,17 +9,23 @@ const GameModel = sequelize.define('games', {
     game_uuid: {
         type: DataTypes.UUID,
         primaryKey: true
+    },
+    turn: {
+        type: DataTypes.STRING
+    },
+    chessboard: {
+        type: DataTypes.STRING
     }
 });
 
 UserModel.hasMany(GameModel, { 
-    foreignKey: 'player_1',
-    as: 'GamesAsPlayer1' 
+    foreignKey: 'white',
+    as: 'GamesAsWhite' 
 });
 
 UserModel.hasMany(GameModel, { 
-    foreignKey: 'player_2',
-    as: 'GamesAsPlayer2' 
+    foreignKey: 'black',
+    as: 'GamesAsBlack' 
 });
 
 module.exports = GameModel;
