@@ -9,8 +9,6 @@ import { TOKEN_KEY } from '../../storageKeys';
 
 import io from 'socket.io-client';
 
-const socket = io();
-
 export default function GameRoom() {
 
     const authContext = useContext(AuthContext);
@@ -18,7 +16,10 @@ export default function GameRoom() {
     const [forbidden, setForbidden ] = useState(false);
     const [white, setWhite] = useState();
     const [black, setBlack] = useState();
+    const socket = useState(io())[0];
 
+    // on dismount disconnect socket
+    useEffect(() => () => socket.disconnect(), [socket]);
 
     // connect to the game channel
     useEffect(() => {
@@ -26,23 +27,29 @@ export default function GameRoom() {
             game_uuid: game_uuid,
             token: localStorage.getItem(TOKEN_KEY)
         });
-    }, [game_uuid]);
+    }, [game_uuid, socket]);
 
     
     // on mount check if this is my game
     useEffect(() => {
+        let mounted = true;
+
         axioAW({
             method: 'get',
             url: '/game/info/players/' + game_uuid
         }, authContext)
         .then((res) => {
+            if (!mounted) return;
             setWhite(res.data.white);
             setBlack(res.data.black);
         })
         .catch((err) => {
+            if (!mounted) return;
             if(err.response !== undefined && err.response.status === 403)
                 setForbidden(true)
         })
+
+        return () => mounted = false;
     }, [authContext, game_uuid]);
 
 

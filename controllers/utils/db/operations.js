@@ -114,3 +114,13 @@ module.exports.createGame = async (game_uuid, player_1, player_2) => {
         return undefined;
     });
 }
+
+
+module.exports.deleteGame = async (game_uuid) => {
+    return await GameModel.destroy({
+        where : {
+            game_uuid: game_uuid
+        }
+    })
+    .catch(() => undefined)
+}

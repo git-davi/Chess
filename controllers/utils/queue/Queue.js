@@ -37,7 +37,7 @@ class Queue {
     stopMatchmaking(token, stopResponseCallback) {
         let ticket = this.queue.get(token.username);
         if (ticket) {
-            gamesList.deleteGame(ticket.game_uuid);
+            dbop.deleteGame(ticket.game_uuid);
             this._removeTicket(token.username);
 
             // without response, the client will get really slow!

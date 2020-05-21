@@ -55,7 +55,7 @@ export default function GamesList({games, setGames}) {
                     </svg>
                 </button>
             </div>
-            {games.map((game) => <GameItem key={game} game={game}/>)}
+            {games.map((game) => <GameItem key={game} game={game} setRefresh={setRefresh}/>)}
         </div>
     );
 }

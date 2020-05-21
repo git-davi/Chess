@@ -132,6 +132,25 @@ module.exports.getGameState = async (req, res) => {
     });
 }
 
+
+module.exports.surrendGame = async (req, res) => {
+
+    const result = await dbop.deleteGame(req.params.game_uuid);
+    
+    if (result === 0)
+        res.status(404).json({
+            message: 'game not found'
+        });
+    if (result === undefined)
+        res.status(500).json({
+            message: 'failed to delete'
+        });
+
+    res.status(200).json({
+        message: 'game surrended with success'
+    });
+}
+
 //-----------------------------OLD---PRE API-- MUST REMOVE-----------------------
 
 

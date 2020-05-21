@@ -18,6 +18,8 @@ router.get('/matchmaking/stop', gameController.stopMatchmaking);
 router.get('/info/players/:game_uuid', gameController.getGamePlayers);
 router.get('/info/state/:game_uuid', gameController.getGameState);
 
+router.delete('/surrend/:game_uuid', gameController.surrendGame)
+
 // ------- old --- pre api -----
 
 router.get('/', gameController.index);
