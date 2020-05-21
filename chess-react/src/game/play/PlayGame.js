@@ -45,7 +45,7 @@ export default function PlayGame({ socket, game_uuid }) {
         });
 
         setChessboard(exampleChessboard);
-        setMyTurn(False);
+        setMyTurn(false);
     }
 
     console.log('Is my turn : '+ myTurn);
