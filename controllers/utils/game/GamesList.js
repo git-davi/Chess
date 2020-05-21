@@ -31,6 +31,10 @@ class GamesList {
     getGame(game_uuid) {
         return this.games.get(game_uuid);
     }
+
+    setGameState(game_uuid, chessboard) {
+        this.games.get(game_uuid).setChessboard(chessboard);
+    }
 }
 
 var gamesList = new GamesList();

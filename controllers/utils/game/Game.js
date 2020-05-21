@@ -2,10 +2,12 @@
 
 // un game è identificato da un uuid
 
+
 class Game {
     constructor(game_uuid, username) {
         this.game_uuid = game_uuid;
         this._assignColor(username);
+        this.chessboard = 'this-should-be-the-initial-state';
     }
 
     _assignColor(username) {
@@ -24,6 +26,11 @@ class Game {
 
     hasPlayer(username) {
         return (username == this.white)  || (username == this.black);
+    }
+
+    setChessboard(chessboard) {
+        this.chessboard = chessboard;
+        console.log(this.chessboard);
     }
 }
 

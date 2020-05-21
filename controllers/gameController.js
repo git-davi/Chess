@@ -91,7 +91,7 @@ module.exports.stopMatchmaking = async (req, res) => {
 };
 
 
-module.exports.getGameInfo = (req, res) => {
+module.exports.getGamePlayers = (req, res) => {
     let game = gamesList.getGame(req.params.game_uuid);
     if (game === undefined) {
         res.status(403).json({
@@ -107,10 +107,31 @@ module.exports.getGameInfo = (req, res) => {
     }
 
     res.status(200).json({
-        game: game
+        white: game.white,
+        black: game.black
     });
 };
 
+
+module.exports.getChessboard = (req, res) => {
+    let game = gamesList.getGame(req.params.game_uuid);
+    if (game === undefined) {
+        res.status(403).json({
+            message: 'You cannot access this resource, probably doesn\'t exists anymore'
+        });
+        return;
+    }
+    if(!game.hasPlayer(res.locals.token.username) ) {
+        res.status(403).json({
+            message: 'You cannot access this resource'
+        });
+        return;
+    }
+
+    res.status(201).json({
+        chessboard: game.chessboard
+    });
+}
 
 //-----------------------------OLD---PRE API-- MUST REMOVE-----------------------
 

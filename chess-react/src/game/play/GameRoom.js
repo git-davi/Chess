@@ -5,6 +5,11 @@ import PlayGame from './PlayGame';
 
 import { axiosAuthWrapper as axioAW } from '../util/axiosAuthWrapper';
 import { AuthContext } from '../../App';
+import { TOKEN_KEY } from '../../storageKeys';
+
+import io from 'socket.io-client';
+
+const socket = io();
 
 export default function GameRoom() {
 
@@ -15,15 +20,24 @@ export default function GameRoom() {
     const [black, setBlack] = useState();
 
 
+    // connect to the game channel
+    useEffect(() => {
+        socket.emit('joinGameRoom', {
+            game_uuid: game_uuid,
+            token: localStorage.getItem(TOKEN_KEY)
+        });
+    }, [game_uuid]);
+
+    
     // on mount check if this is my game
     useEffect(() => {
         axioAW({
             method: 'get',
-            url: '/game/info/'+game_uuid
+            url: '/game/info/players/'+game_uuid
         }, authContext)
         .then((res) => {
-            setWhite(res.data.game.white);
-            setBlack(res.data.game.black);
+            setWhite(res.data.white);
+            setBlack(res.data.black);
         })
         .catch((err) => {
             if(err.response !== undefined && err.response.status === 403)
@@ -52,7 +66,7 @@ export default function GameRoom() {
                         </button>
                     </Link>
                 </div>
-                <PlayGame />
+                <PlayGame socket={socket} game_uuid={game_uuid} />
             </div>
         </div>)
     );
