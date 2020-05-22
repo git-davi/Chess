@@ -5,9 +5,10 @@ import parseJwt from '../util/parseJwt';
 import {TOKEN_KEY} from '../../storageKeys';
 
 
-export default function PlayGame({ socket, game_uuid }) {
+export default function PlayGame({ socket, game_uuid, white, black }) {
     
     const [chessboard, setChessboard] = useState();
+    const [move, setMove] = useState();
     const [myTurn, setMyTurn] = useState();
     const username = useState(parseJwt(localStorage.getItem(TOKEN_KEY)).username)[0];
 
@@ -33,21 +34,25 @@ export default function PlayGame({ socket, game_uuid }) {
     useEffect(() => {
         let mounted = true;
 
-        socket.on(game_uuid, (chessboard) => {
+        socket.on(game_uuid, (data) => {
             if (!mounted) return;
-            setChessboard(chessboard);
+            setChessboard(data.chessboard);
+            setMove(data.Move);
             setMyTurn(true);
         })
 
         return () => mounted = false;
-    }, [game_uuid, chessboard, socket]);
+    }, [game_uuid, socket]);
 
 
     function moveEvent() {
         let exampleChessboard = String(new Date());
+        let exampleMove = 'moved king';
         socket.emit('move', {
             game_uuid: game_uuid,
-            chessboard: exampleChessboard
+            turn: username === white ? black : white,
+            chessboard: exampleChessboard,
+            move: exampleMove
         });
 
         setChessboard(exampleChessboard);
@@ -57,12 +62,12 @@ export default function PlayGame({ socket, game_uuid }) {
     console.log('----------------------------------------------');
     console.log('Is my turn : '+ myTurn);
     console.log('chessboard value : ' + chessboard);
+    console.log('move value : ' + move);
     console.log('----------------------------------------------');
-
 
     return (
         <div className="container">
-            <button type="button" className="btn btn-success" onClick={moveEvent}>Test move</button>
+            <button type="button" className="btn btn-success" onClick={ myTurn ? moveEvent : null }>Test move</button>
         </div>
     );
 }

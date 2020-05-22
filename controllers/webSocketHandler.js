@@ -42,5 +42,8 @@ function move(socket, data) {
     dbop.setGameState(data.game_uuid, data.turn, data.chessboard);
 
     // invio la mossa agli altri giocatori
-    socket.broadcast.emit(data.game_uuid, data.chessboard);
+    socket.broadcast.emit(data.game_uuid, {
+        chessboard: data.chessboard,
+        move: data.move
+    });
 }
