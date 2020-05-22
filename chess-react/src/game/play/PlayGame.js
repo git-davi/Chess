@@ -37,7 +37,7 @@ export default function PlayGame({ socket, game_uuid, white, black }) {
         socket.on(game_uuid, (data) => {
             if (!mounted) return;
             setChessboard(data.chessboard);
-            setMove(data.Move);
+            setMove(data.move);
             setMyTurn(true);
         })
 
@@ -47,7 +47,7 @@ export default function PlayGame({ socket, game_uuid, white, black }) {
 
     function moveEvent() {
         let exampleChessboard = String(new Date());
-        let exampleMove = 'moved king';
+        let exampleMove = String(new Date());
         socket.emit('move', {
             game_uuid: game_uuid,
             turn: username === white ? black : white,

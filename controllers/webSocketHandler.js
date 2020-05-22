@@ -34,6 +34,7 @@ function move(socket, data) {
     data = {
         gameuuid,
         chessboard,
+        move,
         turn
     }
     */
