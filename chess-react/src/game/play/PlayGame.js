@@ -8,6 +8,8 @@ import Chessboard from 'chessboardjsx';
 import parseJwt from '../util/parseJwt';
 import {TOKEN_KEY} from '../../storageKeys';
 
+var fenFunction= null;
+
 
 class ChessboardComp extends Component {
 
@@ -15,7 +17,7 @@ class ChessboardComp extends Component {
     static propTypes = { children: PropTypes.func };
 
     state = {
-        fen: 'start',
+        fen: this.props.chessboard,
         // square styles for active drop squares
         dropSquareStyle: {},
         // custom square styles
@@ -28,14 +30,40 @@ class ChessboardComp extends Component {
     };
 
     componentDidMount() {
-        this.game = new Chess();
+        this.game = new Chess(this.props.chessboard);
+        console.log('lo stato della chessboard è *******************************');
+        console.log(this.props.chessboard);
+        //fenFunction= () => console.log('it worked');
+        //this.game.load(this.props.chessboard);
+        fenFunction=this.game.load;
+        console.log("component mounted!")
+        console.log(fenFunction);
+      /*  this.setState(({ history, pieceSquare }) => ({
+            fen: this.game.fen(),
+            history: this.game.history({ verbose: true }),
+            squareStyles: squareStyling({ pieceSquare, history })
+        }));*/
     }
+
+   /* componentDidUpdate() {
+        if(this.game.fen() != this.props.chessboard){
+            this.setState(({ history, pieceSquare }) => ({
+                fen: this.game.fen(),
+                history: this.game.history({ verbose: true }),
+                squareStyles: squareStyling({ pieceSquare, history })
+            }));
+            this.game.load(this.props.chessboard);
+        }
+    }*/
 
     allowDrag = ({sourceSquare, pieceSquare}) => {
         // do not pick up pieces if the game is over
         // or if it's not that side's turn
         //console.log("sono entrato");
         console.log(this.props.myTurn);
+       /* if((this.game.turn() === 'w' && pieceSquare.search(/^b/) !== -1) ||
+           (this.game.turn() === 'b' && pieceSquare.search(/^w/) !== -1))
+           return false;*/
         if (this.props.myTurn === false) {
             return false;
         }
@@ -77,23 +105,44 @@ class ChessboardComp extends Component {
 
     onDrop = ({ sourceSquare, targetSquare }) => {
         // see if the move is legal
+       /* console.log('turn as i am dropping');
+        console.log(this.game.turn());*/
         let move = this.game.move({
             from: sourceSquare,
             to: targetSquare,
             promotion: 'q' // always promote to a queen for example simplicity
         });
-        console.log(move);
+       // console.log(move);
 
         // illegal move
         if (move === null) return;
+
         this.setState(({ history, pieceSquare }) => ({
             fen: this.game.fen(),
             history: this.game.history({ verbose: true }),
             squareStyles: squareStyling({ pieceSquare, history })
         }));
-        //socket manda la mossa
 
-        this.props.moveEvent(move, this.game.fen());
+        let checkmate=false;
+        let check=false;
+        let draw=false;
+
+        if(this.game.in_checkmate())
+            checkmate=true;
+
+        if(this.game.in_check()===true){
+            check=true;
+            console.log('in checkkkkk!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+        }
+        
+        if(this.game.in_draw())
+            draw=true;
+
+        //socket manda la mossa
+       /* console.log('turn after i dropped')
+        console.log(this.game.turn());*/
+
+        this.props.moveEvent(move, this.game.fen(),checkmate, check, draw);
     };
 
     onMouseOverSquare = square => {
@@ -130,6 +179,8 @@ class ChessboardComp extends Component {
         // illegal move
         if (move === null) return;
 
+        this.props.moveEvent(move, this.game.fen());
+
         this.setState({
             fen: this.game.fen(),
             history: this.game.history({ verbose: true }),
@@ -137,10 +188,16 @@ class ChessboardComp extends Component {
         });
     };
 
-    onSquareRightClick = square =>
+    onSquareRightClick = square => {
         this.setState({
             squareStyles: { [square]: { backgroundColor: 'deepPink' } }
         });
+        this.game.load(this.props.chessboard);
+        console.log('turn of the player ');
+        console.log(this.game.turn());
+        console.log('chessboard position :: ');
+        console.log(this.game.fen())
+    }
 
 
     render() {
@@ -187,6 +244,9 @@ export default function PlayGame({ socket, game_uuid, white, black }) {
     const [chessboard, setChessboard] = useState();
     const [move, setMove] = useState();
     const [myTurn, setMyTurn] = useState();
+    const [check, setCheck] = useState();
+    const [checkmate, setCheckmate] = useState();
+    const [draw, setDraw] = useState();
     const username = useState(parseJwt(localStorage.getItem(TOKEN_KEY)).username)[0];
 
 
@@ -213,43 +273,56 @@ export default function PlayGame({ socket, game_uuid, white, black }) {
 
         socket.on(game_uuid, (data) => {
             if (!mounted) return;
+            console.log('socket.on activated');
+            fenFunction(data.chessboard);
             setChessboard(data.chessboard);
             setMove(data.move);
             setMyTurn(true);
+            setCheck(data.check);
+            setCheckmate(data.checkmate);
+            setDraw(data.draw);
+            console.log('am i in check?');
+            console.log(check);
         })
 
         return () => mounted = false;
     }, [game_uuid, socket]);
 
 
-    function moveEvent(new_move,new_chessboard) {
-        //let exampleChessboard = String(new Date());
-        // let exampleMove = String(new Date());
+    function moveEvent(new_move,new_chessboard, isCheckmate, isCheck, isDraw) {
+
         socket.emit('move', {
             game_uuid: game_uuid,
             turn: username === white ? black : white,
             chessboard: new_chessboard,
             move: new_move,
+            check: isCheck,
+            checkmate: isCheckmate,
+            draw: isDraw
         });
         console.log(new_move);
+        console.log('check?'+ isCheck);
         //setMove(new_move);
         setChessboard(new_chessboard);
         setMyTurn(false);
     }
 
-    console.log('----------------------------------------------');
+    var color;
+    color= username === white ? 'white' : 'black';
+   // console.log('i am player color : ' + color);
+  /*  console.log('----------------------------------------------');
     console.log('Is my turn : '+ myTurn);
     console.log('chessboard value : ' + chessboard);
     console.log('move value : ' ,  JSON.stringify(move));
     console.log('----------------------------------------------');
-
+*/
 
 
     return (
         <div className="container">
             <button type="button" className="btn btn-success" onClick={ myTurn ? moveEvent : null }>Test move</button>
             <div>
-                <ChessboardComp socket={socket} game_uuid={game_uuid} moveEvent={moveEvent} myTurn={myTurn} white={white} black={black} move={move} chessboard={chessboard}>
+                <ChessboardComp socket={socket} game_uuid={game_uuid} moveEvent={moveEvent} myTurn={myTurn} white={white} black={black} move={move} chessboard={chessboard} color={color}>
                     {({
                           position,
                           onDrop,
@@ -266,10 +339,9 @@ export default function PlayGame({ socket, game_uuid, white, black }) {
                         <Chessboard
                             id="humanVsHuman"
                             calcWidth={({ screenWidth }) => (screenWidth < 500 ? 350 : 480)}
-                            position={position}
+                            position={chessboard}
                             onDrop={onDrop}
-                            //mettere l'orientazione a seconda dello stato del tipo
-                            //orientation='black'
+                            orientation={username === white? 'white' : 'black'}
                             onMouseOverSquare={onMouseOverSquare}
                             onMouseOutSquare={onMouseOutSquare}
                             boardStyle={{

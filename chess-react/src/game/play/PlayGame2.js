@@ -283,7 +283,7 @@ export default function PlayGame({ socket, game_uuid, white, black }) {
                         <Chessboard
                             id="humanVsHuman"
                             calcWidth={({ screenWidth }) => (screenWidth < 500 ? 350 : 480)}
-                            position={position}
+                            position={chessboard}
                             onDrop={onDrop}
                             //mettere l'orientazione a seconda dello stato del tipo
                             //orientation='black'

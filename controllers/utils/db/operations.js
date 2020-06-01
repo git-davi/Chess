@@ -109,7 +109,7 @@ module.exports.createGame = async (game_uuid, player_1, player_2) => {
         white: player_1,
         black: player_2,
         turn: player_1,
-        chessboard: 'initial state to be defined'
+        chessboard: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
     }).catch(() => {
         return undefined;
     });
