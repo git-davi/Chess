@@ -9,47 +9,59 @@ import parseJwt from '../util/parseJwt';
 import {TOKEN_KEY} from '../../storageKeys';
 
 
-class ChessboardComp extends Component {
+function ChessboardComp ({socket, game_uuid, moveEvent, myTurn, white,black,move,chessboard}){
 
+    let game;
+    //static propTypes = { children: PropTypes.func };
+    const [fen,setFen] = useState('start');
+    // const [dropsquareStyle,setDropSquareStyle] = useState();
+    const [squareStyles,setSquareStyles] = useState();
+    const [pieceSquare,setPieceSquare]= useState();
+    const [square,setSquare] = useState();
+    const [history,setHistory] = useState();
 
-    static propTypes = { children: PropTypes.func };
-
-    state = {
-        fen: 'start',
-        // square styles for active drop squares
-        dropSquareStyle: {},
-        // custom square styles
-        squareStyles: {},
-        // square with the currently clicked piece
-        pieceSquare: '',
-        // currently clicked square
-        square: '',
-        history: []
-    };
-
-    componentDidMount() {
+    /*state = {
+      fen: 'start',
+      // square styles for active drop squares
+      dropSquareStyle: {},
+      // custom square styles
+      squareStyles: {},
+      // square with the currently clicked piece
+      pieceSquare: '',
+      // currently clicked square
+      square: '',
+      history: []
+    };*/
+    /*
+      componentDidMount() {
         this.game = new Chess();
-    }
+      }
+    */
+    useEffect(() =>{
+        game= new Chess();
+    },[]);
 
-    allowDrag = ({sourceSquare, pieceSquare}) => {
+    const allowDrag = ({sourceSquare, pieceSquare}) => {
         // do not pick up pieces if the game is over
         // or if it's not that side's turn
         //console.log("sono entrato");
-        console.log(this.props.myTurn);
-        if (this.props.myTurn === false) {
+        console.log(myTurn);
+        if (myTurn === false) {
             return false;
         }
         else return true;
     };
     // keep clicked square style and remove hint squares
-    removeHighlightSquare = () => {
-        this.setState(({ pieceSquare, history }) => ({
-            squareStyles: squareStyling({ pieceSquare, history })
-        }));
+    const removeHighlightSquare = () => {/*
+    this.setState(({ pieceSquare, history }) => ({
+      squareStyles: squareStyling({ pieceSquare, history })
+    }));*/
+        let tmp=squareStyling({ pieceSquare, history })
+        setSquareStyles(tmp);
     };
 
     // show possible moves
-    highlightSquare = (sourceSquare, squaresToHighlight) => {
+    const highlightSquare = (sourceSquare, squaresToHighlight) => {
         const highlightStyles = [sourceSquare, ...squaresToHighlight].reduce(
             (a, c) => {
                 return {
@@ -62,22 +74,25 @@ class ChessboardComp extends Component {
                         }
                     },
                     ...squareStyling({
-                        history: this.state.history,
-                        pieceSquare: this.state.pieceSquare
+                        history: history,
+                        pieceSquare: pieceSquare
                     })
                 };
             },
             {}
         );
+        /*
+            this.setState(({ squareStyles }) => ({
+              squareStyles: { ...squareStyles, ...highlightStyles }
+            }));
 
-        this.setState(({ squareStyles }) => ({
-            squareStyles: { ...squareStyles, ...highlightStyles }
-        }));
+         */
     };
 
-    onDrop = ({ sourceSquare, targetSquare }) => {
+    //setSquareStyles((...squareStyles, ...highlightStyles));
+    const onDrop = ({ sourceSquare, targetSquare }) => {
         // see if the move is legal
-        let move = this.game.move({
+        let move = game.move({
             from: sourceSquare,
             to: targetSquare,
             promotion: 'q' // always promote to a queen for example simplicity
@@ -85,20 +100,24 @@ class ChessboardComp extends Component {
         console.log(move);
 
         // illegal move
-        if (move === null) return;
-        this.setState(({ history, pieceSquare }) => ({
-            fen: this.game.fen(),
-            history: this.game.history({ verbose: true }),
-            squareStyles: squareStyling({ pieceSquare, history })
-        }));
+        if (move === null) return;/*
+    this.setState(({ history, pieceSquare }) => ({
+      fen: game.fen(),
+      history: game.history({ verbose: true }),
+      squareStyles: squareStyling({ pieceSquare, history })
+    }));*/
+        setFen(game.fen());
+        setHistory(game.history({verbose : true}));
+        let tmp1=squareStyling({ pieceSquare, history})
+        setSquareStyles(tmp1);
         //socket manda la mossa
 
-        this.props.moveEvent(move, this.game.fen());
+        moveEvent(move, game.fen());
     };
 
-    onMouseOverSquare = square => {
+    const onMouseOverSquare = (square) => {
         // get list of possible moves for this square
-        let moves = this.game.moves({
+        let moves = game.moves({
             square: square,
             verbose: true
         });
@@ -111,55 +130,53 @@ class ChessboardComp extends Component {
             squaresToHighlight.push(moves[i].to);
         }
 
-        this.highlightSquare(square, squaresToHighlight);
+        highlightSquare(square, squaresToHighlight);
     };
 
-    onMouseOutSquare = square => this.removeHighlightSquare(square);
+    const onMouseOutSquare = (square) => removeHighlightSquare(square);
 
-    onSquareClick = square => {
-        this.setState(({ history }) => ({
-            squareStyles: squareStyling({ pieceSquare: square, history }),
-            pieceSquare: square
-        }));
-        let move = this.game.move({
-            from: this.state.pieceSquare,
-            to: square,
-            promotion: 'q' // always promote to a queen for example simplicity
-        });
+    /*const onSquareClick = square => {
+      this.setState(({ history }) => ({
+        squareStyles: squareStyling({ pieceSquare: square, history }),
+        pieceSquare: square
+      }));
+      let move = game.move({
+        from: pieceSquare,
+        to: square,
+        promotion: 'q' // always promote to a queen for example simplicity
+      });
 
-        // illegal move
-        if (move === null) return;
+      // illegal move
+      if (move === null) return;
 
+      this.setState({
+        fen: this.game.fen(),
+        history: this.game.history({ verbose: true }),
+        pieceSquare: ''
+      });
+    };*/
+    /*
+      onSquareRightClick = square =>
         this.setState({
-            fen: this.game.fen(),
-            history: this.game.history({ verbose: true }),
-            pieceSquare: ''
+          squareStyles: { [square]: { backgroundColor: 'deepPink' } }
         });
-    };
+    */
+    //const { fen, dropSquareStyle, squareStyles } = this.state;
 
-    onSquareRightClick = square =>
-        this.setState({
-            squareStyles: { [square]: { backgroundColor: 'deepPink' } }
-        });
+    return props.children({
+        squareStyles,
+        position: fen,
+        //onListen : this.onListen,
+        allowDrag: allowDrag,
+        onMouseOverSquare: onMouseOverSquare,
+        onMouseOutSquare: onMouseOutSquare,
+        onDrop: onDrop,
+        //dropSquareStyle,
+        //onDragOverSquare: this.onDragOverSquare,
+        //onSquareClick: onSquareClick,
+        //onSquareRightClick: onSquareRightClick
+    });
 
-
-    render() {
-        const { fen, dropSquareStyle, squareStyles } = this.state;
-
-        return this.props.children({
-            squareStyles,
-            position: fen,
-            onListen : this.onListen,
-            allowDrag: this.allowDrag,
-            onMouseOverSquare: this.onMouseOverSquare,
-            onMouseOutSquare: this.onMouseOutSquare,
-            onDrop: this.onDrop,
-            dropSquareStyle,
-            //onDragOverSquare: this.onDragOverSquare,
-            onSquareClick: this.onSquareClick,
-            onSquareRightClick: this.onSquareRightClick
-        });
-    }
 }
 
 const squareStyling = ({ pieceSquare, history }) => {
@@ -237,11 +254,11 @@ export default function PlayGame({ socket, game_uuid, white, black }) {
         setMyTurn(false);
     }
 
-    /*console.log('----------------------------------------------');
+    console.log('----------------------------------------------');
     console.log('Is my turn : '+ myTurn);
     console.log('chessboard value : ' + chessboard);
     console.log('move value : ' ,  JSON.stringify(move));
-    console.log('----------------------------------------------');*/
+    console.log('----------------------------------------------');
 
 
 

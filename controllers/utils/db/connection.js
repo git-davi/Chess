@@ -8,12 +8,12 @@ const sequelize = new Sequelize(
     'chess', // password
     {
         host: 'localhost',
-        //dialect: 'mysql',
+        dialect: 'mysql',
         //--------------mariadb-------------
-        dialect: 'mariadb',
-        dialectOptions: {
-            timezone: 'Etc/GMT0',
-        },
+        //dialect: 'mariadb',
+        //dialectOptions: {
+        //    timezone: 'Etc/GMT0',
+        //},
         //-----------------------------
         logging: false
     }
