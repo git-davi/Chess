@@ -237,11 +237,11 @@ export default function PlayGame({ socket, game_uuid, white, black }) {
         setMyTurn(false);
     }
 
-    /*console.log('----------------------------------------------');
+    console.log('----------------------------------------------');
     console.log('Is my turn : '+ myTurn);
     console.log('chessboard value : ' + chessboard);
     console.log('move value : ' ,  JSON.stringify(move));
-    console.log('----------------------------------------------');*/
+    console.log('----------------------------------------------');
 
 
 

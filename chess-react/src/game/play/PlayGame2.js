@@ -15,7 +15,7 @@ function ChessboardComp ({socket, game_uuid, moveEvent, myTurn, white,black,move
     //static propTypes = { children: PropTypes.func };
     const [fen,setFen] = useState('start');
     // const [dropsquareStyle,setDropSquareStyle] = useState();
-    const [squareStyles,setSquareStyles] = useState();
+    //const [squareStyles,setSquareStyles] = useState();
     const [pieceSquare,setPieceSquare]= useState();
     const [square,setSquare] = useState();
     const [history,setHistory] = useState();
@@ -52,14 +52,14 @@ function ChessboardComp ({socket, game_uuid, moveEvent, myTurn, white,black,move
         else return true;
     };
     // keep clicked square style and remove hint squares
-    const removeHighlightSquare = () => {/*
+  /*  const removeHighlightSquare = () => {/*
     this.setState(({ pieceSquare, history }) => ({
       squareStyles: squareStyling({ pieceSquare, history })
-    }));*/
+    }));
         let tmp=squareStyling({ pieceSquare, history })
         setSquareStyles(tmp);
-    };
-
+    };*/
+/*
     // show possible moves
     const highlightSquare = (sourceSquare, squaresToHighlight) => {
         const highlightStyles = [sourceSquare, ...squaresToHighlight].reduce(
@@ -86,8 +86,8 @@ function ChessboardComp ({socket, game_uuid, moveEvent, myTurn, white,black,move
               squareStyles: { ...squareStyles, ...highlightStyles }
             }));
 
-         */
-    };
+
+    };*/
 
     //setSquareStyles((...squareStyles, ...highlightStyles));
     const onDrop = ({ sourceSquare, targetSquare }) => {
@@ -108,14 +108,14 @@ function ChessboardComp ({socket, game_uuid, moveEvent, myTurn, white,black,move
     }));*/
         setFen(game.fen());
         setHistory(game.history({verbose : true}));
-        let tmp1=squareStyling({ pieceSquare, history})
-        setSquareStyles(tmp1);
+      /*  let tmp1=squareStyling({ pieceSquare, history})
+        setSquareStyles(tmp1);*/
         //socket manda la mossa
 
         moveEvent(move, game.fen());
     };
 
-    const onMouseOverSquare = (square) => {
+  /*  const onMouseOverSquare = (square) => {
         // get list of possible moves for this square
         let moves = game.moves({
             square: square,
@@ -134,7 +134,7 @@ function ChessboardComp ({socket, game_uuid, moveEvent, myTurn, white,black,move
     };
 
     const onMouseOutSquare = (square) => removeHighlightSquare(square);
-
+*/
     /*const onSquareClick = square => {
       this.setState(({ history }) => ({
         squareStyles: squareStyling({ pieceSquare: square, history }),
@@ -164,12 +164,12 @@ function ChessboardComp ({socket, game_uuid, moveEvent, myTurn, white,black,move
     //const { fen, dropSquareStyle, squareStyles } = this.state;
 
     return props.children({
-        squareStyles,
+        //squareStyles,
         position: fen,
         //onListen : this.onListen,
         allowDrag: allowDrag,
-        onMouseOverSquare: onMouseOverSquare,
-        onMouseOutSquare: onMouseOutSquare,
+       // onMouseOverSquare: onMouseOverSquare,
+        //onMouseOutSquare: onMouseOutSquare,
         onDrop: onDrop,
         //dropSquareStyle,
         //onDragOverSquare: this.onDragOverSquare,
@@ -179,7 +179,7 @@ function ChessboardComp ({socket, game_uuid, moveEvent, myTurn, white,black,move
 
 }
 
-const squareStyling = ({ pieceSquare, history }) => {
+/*const squareStyling = ({ pieceSquare, history }) => {
     const sourceSquare = history.length && history[history.length - 1].from;
     const targetSquare = history.length && history[history.length - 1].to;
 
@@ -197,7 +197,7 @@ const squareStyling = ({ pieceSquare, history }) => {
         })
     };
 };
-
+*/
 
 export default function PlayGame({ socket, game_uuid, white, black }) {
 
