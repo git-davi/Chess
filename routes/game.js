@@ -20,15 +20,5 @@ router.get('/info/state/:game_uuid', gameController.getGameState);
 
 router.delete('/surrend/:game_uuid', gameController.surrendGame)
 
-// ------- old --- pre api -----
-
-router.get('/', gameController.index);
-router.get('/play/:game_uuid', gameController.isMyGameMiddleware);
-
-router.get('/matchmaking', gameController.matchmaking);
-router.get('/matchmaking/start', gameController.startSearch);
-router.get('/matchmaking/stop', gameController.stopSearch);
-
-router.get('/play/:game_uuid', gameController.playGame);
 
 module.exports = router;
