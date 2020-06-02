@@ -15,6 +15,9 @@ const GameModel = sequelize.define('games', {
     },
     chessboard: {
         type: DataTypes.STRING
+    },
+    name: {
+        type: DataTypes.STRING
     }
 });
 

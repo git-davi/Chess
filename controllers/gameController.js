@@ -37,7 +37,12 @@ module.exports.getUserGames = async (req, res) => {
         return;
     }
 
-    var games = result.map(e => e.game_uuid);
+    var games = result.map(e => {
+        return {
+            game_uuid: e.game_uuid,
+            name: e.name
+        };
+    });
 
     res.status(200).json({
         games: games
@@ -65,8 +70,9 @@ module.exports.startMatchmaking = (req, res) => {
     queue.searchTicket(
         res.locals.token.username, 
         res,
-        (res, game_uuid) => res.status(201).json({
+        (res, game_uuid, name) => res.status(201).json({
             message: "Game found",
+            name: name,
             game_uuid: game_uuid
         })
     );

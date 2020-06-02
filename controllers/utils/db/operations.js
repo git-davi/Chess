@@ -103,9 +103,11 @@ module.exports.createUser = async (user, pass, email) => {
 }
 
 
-module.exports.createGame = async (game_uuid, player_1, player_2) => {
+module.exports.createGame = async (game_uuid, name, player_1, player_2) => {
+
     return await GameModel.create({
         game_uuid: game_uuid,
+        name: name,
         white: player_1,
         black: player_2,
         turn: player_1,

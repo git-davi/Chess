@@ -3,6 +3,10 @@
 const { v4:uuidv4 } = require('uuid');
 
 
+const fs = require('fs');
+const path = require('path');
+
+
 const Ticket = require('./Ticket');
 const dbop = require('../db/operations');
 
@@ -67,15 +71,22 @@ class Queue {
     }
 
 
-    async _createGameInstance(res1, res2, game_uuid) {
+    async _createGameInstance(res1, res2, game_uuid, name) {
         await dbop.createGame(
             game_uuid, 
+            name,
             res1.locals.token.username, 
             res2.locals.token.username
         );
         // if return undefined should be handled
     }
 
+
+    pickRandomName() {
+        let data = fs.readFileSync(path.join(__dirname, 'random_names.txt')).toString();
+        let lines = data.split('\n');
+        return lines[Math.floor(Math.random()*lines.length)];
+    }
 
     async searchTicket(username, res, notifyCallback) {
         var userInfo = await dbop.getUserInfo(username);
@@ -84,18 +95,19 @@ class Queue {
         if (opponent != undefined) {
             let ticket = this.queue.get(opponent);
             this._removeTicket(opponent);
-            await this._createGameInstance(res, ticket.res, ticket.game_uuid);
-            this._notifyGameReady(res, ticket.res, ticket.game_uuid, notifyCallback);
+            let name = this.pickRandomName();
+            await this._createGameInstance(res, ticket.res, ticket.game_uuid, name);
+            this._notifyGameReady(res, ticket.res, ticket.game_uuid, name, notifyCallback);
         }
         else
             this._addTicket(userInfo, uuidv4(), res);
     }
 
     
-    _notifyGameReady(res1, res2, game_uuid, notifyCallback) {  
+    _notifyGameReady(res1, res2, game_uuid, name, notifyCallback) {  
         //tokenHandler.setToken(res1, tokenHandler.addToToken(res1.locals.token, game_uuid));
-        notifyCallback(res1, game_uuid);
-        notifyCallback(res2, game_uuid);
+        notifyCallback(res1, game_uuid, name);
+        notifyCallback(res2, game_uuid, name);
     }
 }
 
