@@ -25,7 +25,7 @@ export default function SearchGame({ games, setGames }) {
         .then((res) => {
             if (!mounted) return;
             setSearchState('idle');
-            setResult({status: 'success', message: 'Game found :'+res.data.name});
+            setResult({status: 'success', message: 'Game found : '+res.data.name});
             setGames([...games, { game_uuid:res.data.game_uuid, name: res.data.name} ]);
         })
         .catch((err) => {
