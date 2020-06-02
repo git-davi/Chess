@@ -13,7 +13,7 @@ export default function Game() {
         <div className="container">
             <Router>
                 <Switch>
-                    <Route path="/game/:game_uuid">
+                    <Route path="/room/:game_uuid">
                         <NavBar />
                         <GameRoom />
                     </Route>
