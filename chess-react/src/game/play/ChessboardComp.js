@@ -4,12 +4,13 @@ import Chess from "chess.js";
 
 //import WithMoveValidation from './WithMoveValidation'
 
+let stringa;
 
 export default class ChessboardComp extends Component {
 
-    static propTypes = { children: PropTypes.func };
-
-    state = {
+    constructor(props){
+        super(props);
+        this.state = {
         fen: this.props.chessboard,
         // square styles for active drop squares
         dropSquareStyle: {},
@@ -20,12 +21,39 @@ export default class ChessboardComp extends Component {
         // currently clicked square
         square: '',
         history: []
-    };
+        }
+        stringa=this.props.chessboard;
+       /* if(this.props.chessboard == null){
+            console.log('waiting timeout')
+            setTimeout(this.waitAlert,4000);
+        }*/
+    }
+
+    static propTypes = { children: PropTypes.func };
+
+    /*state = {
+        fen: this.props.chessboard,
+        // square styles for active drop squares
+        dropSquareStyle: {},
+        // custom square styles
+        squareStyles: {},
+        // square with the currently clicked piece
+        pieceSquare: '',
+        // currently clicked square
+        square: '',
+        history: []
+    };*/
 
     componentDidMount() {
+       /* if(this.props.chessboard == null){
+            console.log('waiting timeout')
+            setTimeout(this.waitAlert,4000);
+        }*/
+        stringa=this.props.chessboard;
         this.game = new Chess(this.props.chessboard);
         console.log('lo stato della chessboard è *******************************');
-        console.log(this.props.chessboard);
+        console.log(stringa);
+        //this.game.load(stringa)
         //fenFunction= () => console.log('it worked');
         //this.game.load(this.props.chessboard);
         //fenFunction=this.game.load;
@@ -39,17 +67,23 @@ export default class ChessboardComp extends Component {
         }));*/
     }
 
-   /* componentDidUpdate() {
+    componentDidUpdate() {
+       // console.log('i am updating!');
+       // console.log(this.game.fen());
+        //console.log(this.props.chessboard);
         if(this.game.fen() != this.props.chessboard){
-            this.setState(({ history, pieceSquare }) => ({
-                fen: this.game.fen(),
-                history: this.game.history({ verbose: true }),
-                squareStyles: squareStyling({ pieceSquare, history })
-            }));
-            this.game.load(this.props.chessboard);
+           /* console.log('they are different!!');
+            console.log(this.game.fen());
+            console.log(this.props.chessboard);*/
+            if(this.props.chessboard != null && this.game.fen() === 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'){
+                this.game.load(this.props.chessboard);
+            }
         }
-    }*/
+    }
 
+    waitAlert = () => {
+        console.log('wait 4 seconds');
+    }
     allowDrag = ({sourceSquare, pieceSquare}) => {
         // do not pick up pieces if the game is over
         // or if it's not that side's turn
@@ -182,7 +216,7 @@ export default class ChessboardComp extends Component {
         });
     };
 
-    /*
+    
     onSquareRightClick = square => {
         this.setState({
             squareStyles: { [square]: { backgroundColor: 'deepPink' } }
@@ -193,7 +227,7 @@ export default class ChessboardComp extends Component {
         console.log('chessboard position :: ');
         console.log(this.game.fen())
     }
-    */
+    
 
     render() {
         const { fen, dropSquareStyle, squareStyles } = this.state;
