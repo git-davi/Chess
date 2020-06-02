@@ -73,6 +73,8 @@ export default function GameRoom() {
                         </button>
                     </Link>
                 </div>
+            </div>
+            <div className="mt-5 mb-5">
                 <PlayGame socket={socket} game_uuid={game_uuid} white={white} black={black} />
             </div>
         </div>)
