@@ -45,6 +45,10 @@ function move(socket, data) {
     // invio la mossa agli altri giocatori
     socket.broadcast.emit(data.game_uuid, {
         chessboard: data.chessboard,
-        move: data.move
+        move: data.move,
+        check: data.check,
+        checkmate: data.checkmate,
+        draw: data.draw
+
     });
 }

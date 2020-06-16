@@ -48,7 +48,6 @@ export default function PlayGame({ socket, game_uuid, white, black }) {
 
         socket.on(game_uuid, (data) => {
             if (!mounted) return;
-            console.log('socket.on activated');
             fenFunction(data.chessboard);
             setChessboard(data.chessboard);
             setMove(data.move);
@@ -57,11 +56,11 @@ export default function PlayGame({ socket, game_uuid, white, black }) {
             setCheckmate(data.checkmate);
             setDraw(data.draw);
             console.log('am i in check?');
-            console.log(check);
+            console.log(data.check);
         })
 
         return () => mounted = false;
-    }, [game_uuid, socket, fenFunction, check]);
+    }, [game_uuid, socket]);
 
 
     function moveEvent(new_move,new_chessboard, isCheckmate, isCheck, isDraw) {
@@ -75,7 +74,7 @@ export default function PlayGame({ socket, game_uuid, white, black }) {
             checkmate: isCheckmate,
             draw: isDraw
         });
-        console.log(new_move);
+      //  console.log(new_move);
         console.log('check?'+ isCheck);
         //setMove(new_move);
         setChessboard(new_chessboard);
@@ -91,7 +90,7 @@ export default function PlayGame({ socket, game_uuid, white, black }) {
     console.log('move value : ' ,  JSON.stringify(move));
     console.log('----------------------------------------------');
 */
-
+    console.log('check value is ' + check)
 
     return (
         <div className="container">
@@ -141,8 +140,13 @@ export default function PlayGame({ socket, game_uuid, white, black }) {
                             onSquareRightClick={onSquareRightClick}
                         />
                     )}
+
                 </ChessboardComp>
             </div>
+            {check === true && (<h2 className="alert alert-danger"> Check!!! </h2>) }
+            {checkmate === true && (<h2 className="alert alert-danger"> Checkmate!!! </h2>) }
+            {draw === true && (<h2 className="alert alert-danger"> Draw!!! </h2>) }
+
         </div>
     );
 }
