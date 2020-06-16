@@ -68,7 +68,7 @@ export default class ChessboardComp extends Component {
     }
 
     componentDidUpdate() {
-        if(this.game.fen() != this.props.chessboard){
+        if(this.game.fen() !== this.props.chessboard){
             if(this.props.chessboard != null && this.game.fen() === 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'){
                 this.game.load(this.props.chessboard);
             }
@@ -164,7 +164,11 @@ export default class ChessboardComp extends Component {
             draw=true;
             console.log('draw game!!!!!');
         }    
-
+        
+        if (checkmate)
+            this.props.setGameState('You Win');
+        if (draw)
+            this.props.setGameState('Draw');
         this.props.moveEvent(move, this.game.fen(),checkmate, check, draw);
     };
 

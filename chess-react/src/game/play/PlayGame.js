@@ -14,9 +14,10 @@ export default function PlayGame({ socket, game_uuid, white, black }) {
     const [chessboard, setChessboard] = useState();
     const [move, setMove] = useState();
     const [myTurn, setMyTurn] = useState();
-    const [check, setCheck] = useState();
-    const [checkmate, setCheckmate] = useState();
-    const [draw, setDraw] = useState();
+    const [gameState, setGameState] = useState();
+    //const [check, setCheck] = useState();
+    //const [checkmate, setCheckmate] = useState();
+    //const [draw, setDraw] = useState();
     const username = useState(parseJwt(localStorage.getItem(TOKEN_KEY)).username)[0];
 
     //const [fenFunction, setFenFunction] = useState();
@@ -52,15 +53,16 @@ export default function PlayGame({ socket, game_uuid, white, black }) {
             setChessboard(data.chessboard);
             setMove(data.move);
             setMyTurn(true);
-            setCheck(data.check);
-            setCheckmate(data.checkmate);
-            setDraw(data.draw);
-            console.log('am i in check?');
-            console.log(data.check);
+            if (data.check)
+                setGameState('Check');
+            if (data.checkmate)
+                setGameState('CheckMate');
+            if (data.draw)
+                setGameState('Draw');
         })
 
         return () => mounted = false;
-    }, [game_uuid, socket]);
+    }, [game_uuid, socket, fenFunction]);
 
 
     function moveEvent(new_move,new_chessboard, isCheckmate, isCheck, isDraw) {
@@ -84,13 +86,13 @@ export default function PlayGame({ socket, game_uuid, white, black }) {
     var color;
     color= username === white ? 'white' : 'black';
    // console.log('i am player color : ' + color);
-  /*  console.log('----------------------------------------------');
+    /*
+    console.log('----------------------------------------------');
     console.log('Is my turn : '+ myTurn);
     console.log('chessboard value : ' + chessboard);
     console.log('move value : ' ,  JSON.stringify(move));
     console.log('----------------------------------------------');
-*/
-    console.log('check value is ' + check)
+    */
 
     return (
         <div className="container">
@@ -106,6 +108,7 @@ export default function PlayGame({ socket, game_uuid, white, black }) {
                                 chessboard={chessboard} 
                                 color={color}
                                 setFenFunction={setFenFunction}
+                                setGameState={setGameState}
                                 >
                     {({
                           position,
@@ -143,9 +146,11 @@ export default function PlayGame({ socket, game_uuid, white, black }) {
 
                 </ChessboardComp>
             </div>
-            {check === true && (<h2 className="alert alert-danger"> Check!!! </h2>) }
-            {checkmate === true && (<h2 className="alert alert-danger"> Checkmate!!! </h2>) }
-            {draw === true && (<h2 className="alert alert-danger"> Draw!!! </h2>) }
+            {gameState && (
+                <div className="d-sm-flex justify-content-center m-5">
+                    <h1 className="alert alert-primary">{gameState}</h1>
+                </div>
+            ) }
 
         </div>
     );
