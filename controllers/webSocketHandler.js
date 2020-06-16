@@ -39,6 +39,12 @@ function move(socket, data) {
     }
     */
 
+    if (data.checkmate)
+        dbop.calculateEloGame(data.game_uuid, data.username, 1, 0);
+    else if (data.draw)
+        dbop.calculateEloGame(data.game_uuid, data.username, 0.5, 0.5);
+        // draw elo calculate
+
     // update db state chessboard
     dbop.setGameState(data.game_uuid, data.turn, data.chessboard);
 

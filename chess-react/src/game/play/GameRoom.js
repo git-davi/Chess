@@ -9,7 +9,7 @@ import { TOKEN_KEY } from '../../storageKeys';
 
 import io from 'socket.io-client';
 
-export default function GameRoom() {
+export default function GameRoom({ setRefresh }) {
 
     const authContext = useContext(AuthContext);
     const { game_uuid } = useParams();
@@ -64,7 +64,7 @@ export default function GameRoom() {
                         <h3 className="">&#9818; <span className="badge badge-dark">{black}</span></h3>
                     </div>
                     <Link className="ml-auto" to="/">
-                        <button className="btn btn-secondary btn-md">
+                        <button className="btn btn-secondary btn-md" onClick={() => setRefresh(true)}>
                             Home
                             <svg className="bi bi-house-fill" width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                 <path fillRule="evenodd" d="M8 3.293l6 6V13.5a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 012 13.5V9.293l6-6zm5-.793V6l-2-2V2.5a.5.5 0 01.5-.5h1a.5.5 0 01.5.5z" clipRule="evenodd"/>

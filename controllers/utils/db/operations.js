@@ -126,3 +126,39 @@ module.exports.deleteGame = async (game_uuid) => {
     })
     .catch(() => undefined)
 }
+
+
+module.exports.calculateEloGame = async (game_uuid, username, sp_1, sp_2) => {
+    const result = await GameModel.findByPk(game_uuid)
+    .catch(() => null);
+    
+    if (result === null) return;
+
+    let winner = result.white === username? result.white : result.black;
+    let loser = result.white === username ? result.black : result.white;
+
+    let elo_winner = (await UserModel.findByPk(winner)).elo;
+    let elo_loser = (await UserModel.findByPk(loser)).elo;
+
+    let p1 = (1.0 / (1.0 + Math.pow(10, ((elo_loser - elo_winner)/400))));
+    let p2 = (1.0 / (1.0 + Math.pow(10, ((elo_winner - elo_loser)/400))));
+
+    // new elo winner 
+    elo_winner = elo_winner + 40 * (sp_1 - p1);
+
+    // new elo_loser
+    elo_loser = elo_loser + 40 * (sp_2 - p2);
+
+    // write to db
+    UserModel.update({
+        elo: elo_winner
+    }, {
+        where: {username: winner}
+    });
+
+    UserModel.update({
+        elo: elo_loser
+    }, {
+        where: {username: loser}
+    });
+}

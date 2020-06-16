@@ -8,12 +8,13 @@ import parseJwt from './util/parseJwt';
 import logout from './util/logout';
 
 
-export default function NavBar() {
+export default function NavBar({ refresh, setRefresh }) {
 
     const authContext = useContext(AuthContext);
     
     const token = localStorage.getItem(TOKEN_KEY);
     const [userInfo, setUserInfo] = useState({});
+
 
     useEffect(() => {
         let mounted = true;
@@ -30,8 +31,9 @@ export default function NavBar() {
         .then((res) => mounted ? setUserInfo(res.data) : null)
         .catch((err) => console.log(err));
 
+        setRefresh(false);
         return () => mounted = false;
-    }, [token, authContext]);
+    }, [token, authContext, refresh]);
 
 
     return (

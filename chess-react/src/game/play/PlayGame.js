@@ -15,12 +15,8 @@ export default function PlayGame({ socket, game_uuid, white, black }) {
     const [move, setMove] = useState();
     const [myTurn, setMyTurn] = useState();
     const [gameState, setGameState] = useState();
-    //const [check, setCheck] = useState();
-    //const [checkmate, setCheckmate] = useState();
-    //const [draw, setDraw] = useState();
     const username = useState(parseJwt(localStorage.getItem(TOKEN_KEY)).username)[0];
 
-    //const [fenFunction, setFenFunction] = useState();
     var fenFunction = null;
     function setFenFunction(callback) {
         fenFunction = callback;
@@ -69,6 +65,7 @@ export default function PlayGame({ socket, game_uuid, white, black }) {
 
         socket.emit('move', {
             game_uuid: game_uuid,
+            whosend: username,
             turn: username === white ? black : white,
             chessboard: new_chessboard,
             move: new_move,
