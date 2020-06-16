@@ -37,7 +37,12 @@ module.exports.getUserGames = async (req, res) => {
         return;
     }
 
-    var games = result.map(e => e.game_uuid);
+    var games = result.map(e => {
+        return {
+            game_uuid: e.game_uuid,
+            name: e.name
+        };
+    });
 
     res.status(200).json({
         games: games
@@ -65,8 +70,9 @@ module.exports.startMatchmaking = (req, res) => {
     queue.searchTicket(
         res.locals.token.username, 
         res,
-        (res, game_uuid) => res.status(201).json({
+        (res, game_uuid, name) => res.status(201).json({
             message: "Game found",
+            name: name,
             game_uuid: game_uuid
         })
     );
@@ -150,60 +156,3 @@ module.exports.surrendGame = async (req, res) => {
         message: 'game surrended with success'
     });
 }
-
-//-----------------------------OLD---PRE API-- MUST REMOVE-----------------------
-
-
-var gamesList = null;
-
-module.exports.index = function(req, res) {
-    res.render('home', { 
-        token: res.locals.token,
-    });
-};
-
-
-module.exports.startSearch = async (req, res) => {
-
-    if(queue.hasTicket(res.locals.token)) {
-        queue.setNewResponse(res.locals.token, res);
-        return;
-    }
-
-    await queue.searchTicket(res.locals.token, res);
-};
-
-
-module.exports.matchmaking = (req, res) => {
-    res.render('search_game');
-};
-
-
-// If the user leave the page without pressing the stop button
-// the ticket and the game will be left in queue
-// We can take this as an advantage. Background search for games?
-module.exports.stopSearch = (req, res) => {
-    queue.stopMatchmaking(res.locals.token);
-    res.redirect("/game");
-}
-
-
-module.exports.isMyGameMiddleware = (req, res, next) => {
-
-    var game = gamesList.getGame(req.params.game_uuid);
-    if (game == undefined || !game.hasPlayer(res.locals.token.username)) {
-        res.status(400);
-        res.send('How do you get here? :)');
-    }
-    else {
-        res.locals.game = game;
-        next();
-    }
-};
-
-
-module.exports.playGame = (req, res) => {
-    res.render('play_game', {
-        game: res.locals.game
-    })
-};

@@ -5,7 +5,7 @@ import {AuthContext} from '../../App';
 import {axiosAuthWrapper as axiosAW} from '../util/axiosAuthWrapper';
 
 
-export default function GameItem( { game, setRefresh }) {
+export default function GameItem( { game, name, setRefresh }) {
 
     // I could choose an api to generate random name for games instead of displaying uuid
 
@@ -26,8 +26,8 @@ export default function GameItem( { game, setRefresh }) {
                 <path d="M11.5 6.026a.5.5 0 11-1 0 .5.5 0 011 0zm-1 1a.5.5 0 11-1 0 .5.5 0 011 0zm2 0a.5.5 0 11-1 0 .5.5 0 011 0zm-1 1a.5.5 0 11-1 0 .5.5 0 011 0zm-7-2.5h1v3h-1v-3z"/>
                 <path d="M3.5 6.526h3v1h-3v-1zM3.051 3.26a.5.5 0 01.354-.613l1.932-.518a.5.5 0 01.258.966l-1.932.518a.5.5 0 01-.612-.354zm9.976 0a.5.5 0 00-.353-.613l-1.932-.518a.5.5 0 10-.259.966l1.932.518a.5.5 0 00.612-.354z"/>
             </svg>
-            <span className="ml-3">Game : {game}</span>
-            <Link className="ml-auto" to={'/game/'+game}>
+            <span className="ml-3">Game : {name}</span>
+            <Link className="ml-auto" to={'/room/'+game}>
                 <button className="btn btn-success btn-md" type="button">
                     <svg className="bi bi-caret-right-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12.14 8.753l-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 011.659-.753l5.48 4.796a1 1 0 010 1.506z"/>
