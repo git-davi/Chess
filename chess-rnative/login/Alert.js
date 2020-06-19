@@ -1,14 +1,13 @@
 import React from 'react';
 
+import { View, Text } from 'native-base';
+
 
 export default function Alert({ response }) {
 
     return (
-        <>
-        { response.status !== null && 
-            <div className={"alert alert-" +  (response.status > 201 ? 'danger' : 'success')} role="alert">
-                {response.message}
-            </div> }
-        </>
+        <View>
+        { response.status !== null && <Text>{response.message}</Text> }
+        </View>
     );
 }
