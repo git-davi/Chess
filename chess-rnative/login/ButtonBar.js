@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { StyleSheet } from 'react-native';
 import { View, Button, Text } from 'native-base';
 
 function ButtonBarLogin({ changeForm, action }) {
@@ -32,7 +33,7 @@ function ButtonBarRegistration({ changeForm, action }) {
 export default function ButtonBar({ changeForm, form, action }) {
 
     return (
-        <View>
+        <View style={styles.buttonBar}>
             { form === 'login' 
                 ? <ButtonBarLogin changeForm={changeForm} action={action}/>
                 : <ButtonBarRegistration changeForm={changeForm} action={action}/> 
@@ -40,3 +41,10 @@ export default function ButtonBar({ changeForm, form, action }) {
         </View>
     );
 }
+
+
+const styles = StyleSheet.create({
+    buttonBar: {
+        marginTop: 30,
+    },
+  });
