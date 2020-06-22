@@ -23,11 +23,11 @@ export default function nForm() {
     const context = useContext(AuthContext);
 
     function login() {
-        loginSubmit(data, setResponse, context.setAuth);
+        loginSubmit(data, setResponse, context.setAuth, context.setServer);
     }
 
     function register() {
-        registerSubmit(data, setResponse, context.setAuth);
+        registerSubmit(data, setResponse, context.setAuth, context.setServer);
     }
 
     function changeForm() {

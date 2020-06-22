@@ -3,7 +3,7 @@ import {TOKEN_KEY} from '../../storageKeys';
 import { AsyncStorage } from 'react-native';
 
 
-function request(url, data, setResponse, setAuth) {
+function request(url, data, setResponse, setAuth, setServer) {
     axios.post(url, data)
     .then(async (res) => {
         setResponse({
@@ -12,6 +12,8 @@ function request(url, data, setResponse, setAuth) {
         });
         await AsyncStorage.setItem(TOKEN_KEY, res.data.token);
         setAuth(true);
+        await AsyncStorage.setItem("server", data.server);
+        setServer(data.server);
     })
     .catch((err) => {
         setResponse({
@@ -22,7 +24,7 @@ function request(url, data, setResponse, setAuth) {
 }
 
 
-export function loginSubmit(data, setResponse, setAuth) {
+export function loginSubmit(data, setResponse, setAuth, setServer) {
 
     if (!data.server || !data.username || !data.password) {
         setResponse({
@@ -35,11 +37,11 @@ export function loginSubmit(data, setResponse, setAuth) {
     request(data.server + '/auth/login', {
         username: data.username,
         password: data.password
-        }, setResponse, setAuth);
+        }, setResponse, setAuth, setServer);
 }
 
 
-export function registerSubmit(data, setResponse, setAuth) {
+export function registerSubmit(data, setResponse, setAuth, setServer) {
 
     if (!data.server || !data.mail || !data.username || !data.password || !data.validpassword) {
         setResponse({
@@ -57,9 +59,9 @@ export function registerSubmit(data, setResponse, setAuth) {
         return;
     }
     
-    request(data.server + '/auth/login', {
+    request(data.server + '/auth/register', {
         username: data.username,
         password: data.password,
         email: data.email
-    }, setResponse, setAuth);
+    }, setResponse, setAuth, setServer);
 }

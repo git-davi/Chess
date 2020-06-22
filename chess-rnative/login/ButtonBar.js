@@ -1,31 +1,39 @@
 import React from 'react';
 
 import { StyleSheet } from 'react-native';
-import { View, Button, Text } from 'native-base';
+import { View, Button, Text, Grid, Col } from 'native-base';
 
 function ButtonBarLogin({ changeForm, action }) {
     return (
-            <View>
-                <Button onPress={() => action()}>
-                    <Text>Login</Text>
-                </Button>
-                <Button onPress={() => changeForm()}>
-                    <Text>Register</Text>
-                </Button>
-            </View>
+            <Grid>
+                <Col>
+                    <Button info style={styles.button} onPress={() => action()}>
+                        <Text>Login</Text>
+                    </Button>
+                </Col>
+                <Col>
+                    <Button light style={styles.button} onPress={() => changeForm()}>
+                        <Text>Register</Text>
+                    </Button>
+                </Col>
+            </Grid>
     );
 }
 
 function ButtonBarRegistration({ changeForm, action }) {
     return (
-            <View>
-                <Button onPress={() => changeForm()}>
-                    <Text>Login</Text>
-                </Button>
-                <Button onPress={() => action()}>
-                    <Text>Register</Text>
-                </Button>
-            </View>
+            <Grid>
+                <Col>
+                    <Button light style={styles.button} onPress={() => changeForm()}>
+                        <Text>Login</Text>
+                    </Button>
+                </Col>
+                <Col>
+                    <Button info style={styles.button} onPress={() => action()}>
+                        <Text>Register</Text>
+                    </Button>
+                </Col>
+            </Grid>
     );
 }
 
@@ -47,4 +55,7 @@ const styles = StyleSheet.create({
     buttonBar: {
         marginTop: 30,
     },
+    button: {
+        margin: 10
+    }
   });

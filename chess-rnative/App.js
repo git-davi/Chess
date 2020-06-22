@@ -1,7 +1,7 @@
-import React, { useState, createContext, useEffect } from 'react';
+import React, { useState, createContext, useEffect, useContext } from 'react';
 import { StyleSheet, StatusBar } from 'react-native';
 import { AsyncStorage, ScrollView } from 'react-native';
-import { Text, Container } from 'native-base';
+import { Button, Container } from 'native-base';
 
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
@@ -15,8 +15,12 @@ import {TOKEN_KEY} from './storageKeys.js';
 /*
   debug purpose
 */
+import logout from './game/util/logout'
+import Alert from './login/Alert';
+
 function Game() {
-  return <Text>Ok</Text>;
+  const context = useContext(AuthContext);
+  return <Button onPress={() => logout(context, TOKEN_KEY)}></Button>;
 }
 
 export const AuthContext = createContext();
