@@ -4,7 +4,15 @@
   "packagerNgrokUrl": null,
   "ngrokPid": null,
   "packagerPort": 19001,
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
   "packagerPid": 4667,
+=======
+  "packagerPid": 1599,
+>>>>>>> Stashed changes
+=======
+  "packagerPid": 1599,
+>>>>>>> Stashed changes
   "webpackServerPort": null,
   "devToolsPort": 19002
 }
