@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-native';
 import { View, Text, Button } from 'native-base'
 
@@ -9,12 +9,13 @@ import {axiosAuthWrapper as axiosAW} from '../util/axiosAuthWrapper';
 export default function GameItem( { game, name, setRefresh }) {
 
     // I could choose an api to generate random name for games instead of displaying uuid
+    const authContext = useContext(AuthContext);
 
     function surrend() {
         axiosAW({
             method: 'delete',
             url: '/game/surrend/' + game
-        }, AuthContext)
+        }, authContext)
         .catch(() => console.log('Failed to surrend'));
 
         setRefresh(true);
@@ -23,12 +24,12 @@ export default function GameItem( { game, name, setRefresh }) {
     return (
         <View>
             <Text>Game : {name}</Text>
-            <Link className="ml-auto" to={'/room/'+game}>
+            <Link to={'/room/'+game}>
                 <Button success>
                     <Text>Play</Text>
                 </Button>
             </Link>
-            <Button danger onClick={() => surrend()}>
+            <Button danger onPress={() => surrend()}>
                 <Text>Surrend</Text>
             </Button>
         </View>

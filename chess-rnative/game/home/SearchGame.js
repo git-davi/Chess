@@ -70,11 +70,11 @@ export default function SearchGame({ games, setGames }) {
             <View>
                 <View>
                     { searchState === 'start' &&
-                    <Button danger onClick={() => setSearchState('stop')}>
+                    <Button danger onPress={() => setSearchState('stop')}>
                         <Text>Stop Search</Text>
                     </Button> }
                     { searchState === 'idle' &&
-                    <Button success onClick={() => setSearchState('start')}>
+                    <Button success onPress={() => setSearchState('start')}>
                         <Text>Search a New Game</Text>
                     </Button> }
                     { searchState === 'stop' &&

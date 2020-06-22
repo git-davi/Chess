@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NativeRouter as Router, Switch, Route } from 'react-router-native';
 import { View } from 'native-base';
 
@@ -11,12 +11,9 @@ import GamesHandler from './home/GamesHandler';
 export default function Game() {
     const [refresh, setRefresh] = useState();
     
-    //console.log(refresh);
-    /*
     useEffect(() => {
         setRefresh(false);
     }, [refresh]);
-    */
 
    return (
         <View>

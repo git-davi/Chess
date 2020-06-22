@@ -49,7 +49,7 @@ export default function GamesList({games, setGames}) {
         <View>
             <View>
                 <Text>Games List</Text>
-                <Button onClick={() => setRefresh(true)}>
+                <Button onPress={() => setRefresh(true)}>
                     <Text>Refresh</Text>
                 </Button>
             </View>

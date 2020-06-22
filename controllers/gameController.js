@@ -141,8 +141,10 @@ module.exports.getGameState = async (req, res) => {
 
 module.exports.surrendGame = async (req, res) => {
 
-    const result = await dbop.deleteGame(req.params.game_uuid);
-    
+    let result = await dbop.getGame(req.params.game_uuid);
+    let winner = result.white === res.locals.token.username? result.black : result.white;
+    dbop.calculateEloGame(req.params.game_uuid, winner, 1, 0);
+
     if (result === 0)
         res.status(404).json({
             message: 'game not found'

@@ -9,12 +9,10 @@ import GameRoom from './play/GameRoom';
 export default function Game() {
     const [refresh, setRefresh] = useState();
     
-    //console.log(refresh);
-    /*
     useEffect(() => {
         setRefresh(false);
     }, [refresh]);
-    */
+    
     return (
         <div className="container">
             <Router>
