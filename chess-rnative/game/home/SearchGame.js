@@ -1,7 +1,9 @@
 import React, { useContext, useState, useEffect } from 'react';
+import { View, Text, Button } from 'native-base'
 
 import {AuthContext} from '../../App';
 import {axiosAuthWrapper as axiosAW} from '../util/axiosAuthWrapper';
+
 
 
 export default function SearchGame({ games, setGames }) {
@@ -64,36 +66,25 @@ export default function SearchGame({ games, setGames }) {
 
 
     return (
-        <div className="container">
-            <div className="d-flex flex-wrap m-3 align-items-center">
-                <div className="mr-auto">
+        <View>
+            <View>
+                <View>
                     { searchState === 'start' &&
-                    <button className="btn btn-lg btn-danger" type="button" onClick={() => setSearchState('stop')}>
-                        Stop Search
-                        <svg className="bi bi-exclamation-octagon-fill ml-3" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <path fillRule="evenodd" d="M11.46.146A.5.5 0 0011.107 0H4.893a.5.5 0 00-.353.146L.146 4.54A.5.5 0 000 4.893v6.214a.5.5 0 00.146.353l4.394 4.394a.5.5 0 00.353.146h6.214a.5.5 0 00.353-.146l4.394-4.394a.5.5 0 00.146-.353V4.893a.5.5 0 00-.146-.353L11.46.146zM8 4a.905.905 0 00-.9.995l.35 3.507a.552.552 0 001.1 0l.35-3.507A.905.905 0 008 4zm.002 6a1 1 0 100 2 1 1 0 000-2z" clipRule="evenodd"/>
-                        </svg>
-                    </button> }
+                    <Button danger onClick={() => setSearchState('stop')}>
+                        <Text>Stop Search</Text>
+                    </Button> }
                     { searchState === 'idle' &&
-                    <button className="btn btn-lg btn-success" type="button" onClick={() => setSearchState('start')}>
-                        Search a New Game
-                        <svg className="bi bi-search ml-3" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <path fillRule="evenodd" d="M10.442 10.442a1 1 0 011.415 0l3.85 3.85a1 1 0 01-1.414 1.415l-3.85-3.85a1 1 0 010-1.415z" clipRule="evenodd"/>
-                            <path fillRule="evenodd" d="M6.5 12a5.5 5.5 0 100-11 5.5 5.5 0 000 11zM13 6.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z" clipRule="evenodd"/>
-                        </svg>
-                    </button> }
+                    <Button success onClick={() => setSearchState('start')}>
+                        <Text>Search a New Game</Text>
+                    </Button> }
                     { searchState === 'stop' &&
-                    <button className="btn btn-lg btn-warning" type="button">
-                        Stopping
-                        <svg className="bi bi-clock" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <path fillRule="evenodd" d="M8 15A7 7 0 108 1a7 7 0 000 14zm8-7A8 8 0 110 8a8 8 0 0116 0z" clipRule="evenodd"/>
-                            <path fillRule="evenodd" d="M7.5 3a.5.5 0 01.5.5v5.21l3.248 1.856a.5.5 0 01-.496.868l-3.5-2A.5.5 0 017 9V3.5a.5.5 0 01.5-.5z" clipRule="evenodd"/>
-                        </svg>
-                    </button> }
-                </div>
-                { result.status === 'success' && <div className="alert alert-success m-0" role="alert">{result.message}</div> }
-                { result.status === 'failed' && <div className="alert alert-danger m-0" role="alert">{result.message}</div> }
-            </div>
-        </div>
+                    <Button warning>
+                        <Text>Stopping</Text>
+                    </Button> }
+                </View>
+                { result.status === 'success' && <Text>{result.message}</Text> }
+                { result.status === 'failed' && <Text>{result.message}</Text> }
+            </View>
+        </View>
     );
 }

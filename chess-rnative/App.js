@@ -8,20 +8,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { AppLoading } from 'expo';
 
 import Login from './login/Login';
-//import Game from './game/Game';
+import Game from './game/Game';
 import {TOKEN_KEY} from './storageKeys.js';
 
-
-/*
-  debug purpose
-*/
-import logout from './game/util/logout'
-import Alert from './login/Alert';
-
-function Game() {
-  const context = useContext(AuthContext);
-  return <Button onPress={() => logout(context, TOKEN_KEY)}></Button>;
-}
 
 export const AuthContext = createContext();
 
@@ -31,10 +20,9 @@ export default function App() {
   const [server, setServer] = useState();
 
   useEffect(() => {
-    AsyncStorage.getItem(TOKEN_KEY).then(val => setAuth(val !== null));
+    AsyncStorage.getItem(TOKEN_KEY).then(val => setAuth(val));
     AsyncStorage.getItem('server').then(val => setServer(val));
   });
-
 
   useEffect(() => {
     Font.loadAsync({

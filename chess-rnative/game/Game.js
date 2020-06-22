@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import React, { useState } from 'react';
+import { NativeRouter as Router, Switch, Route } from 'react-router-native';
+import { View } from 'native-base';
 
 import NavBar from './NavBar';
 import GamesHandler from './home/GamesHandler';
-import GameRoom from './play/GameRoom';
+//import GameRoom from './play/GameRoom';
+
 
 
 export default function Game() {
@@ -15,8 +17,25 @@ export default function Game() {
         setRefresh(false);
     }, [refresh]);
     */
+
+   return (
+        <View>
+            <Router>
+                <Switch>
+                    <Route path="/room/:game_uuid">
+                        <NavBar refresh={refresh} setRefresh={setRefresh} />
+                    </Route>
+                    <Route path="/">
+                        <NavBar refresh={refresh} setRefresh={setRefresh} />
+                        <GamesHandler />
+                    </Route>
+                </Switch>
+            </Router>
+        </View>
+    );
+    /*
     return (
-        <div className="container">
+        <View>
             <Router>
                 <Switch>
                     <Route path="/room/:game_uuid">
@@ -29,6 +48,7 @@ export default function Game() {
                     </Route>
                 </Switch>
             </Router>
-        </div>
+        </View>
     );
+    */
 }

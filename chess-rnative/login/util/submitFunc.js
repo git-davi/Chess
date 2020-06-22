@@ -3,17 +3,18 @@ import {TOKEN_KEY} from '../../storageKeys';
 import { AsyncStorage } from 'react-native';
 
 
-function request(url, data, setResponse, setAuth, setServer) {
+function request(url, server, data, setResponse, setAuth, setServer) {
     axios.post(url, data)
     .then(async (res) => {
         setResponse({
             status: res.status,
             message: res.data.message
         });
+
         await AsyncStorage.setItem(TOKEN_KEY, res.data.token);
-        setAuth(true);
-        await AsyncStorage.setItem("server", data.server);
-        setServer(data.server);
+        await AsyncStorage.setItem("server", server);
+        setAuth(res.data.token);
+        setServer(server);
     })
     .catch((err) => {
         setResponse({
@@ -34,7 +35,7 @@ export function loginSubmit(data, setResponse, setAuth, setServer) {
         return;
     }
 
-    request(data.server + '/auth/login', {
+    request(data.server + '/auth/login', data.server, {
         username: data.username,
         password: data.password
         }, setResponse, setAuth, setServer);
@@ -59,7 +60,7 @@ export function registerSubmit(data, setResponse, setAuth, setServer) {
         return;
     }
     
-    request(data.server + '/auth/register', {
+    request(data.server + '/auth/register', data.server, {
         username: data.username,
         password: data.password,
         email: data.email
