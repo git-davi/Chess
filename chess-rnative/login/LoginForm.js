@@ -13,7 +13,7 @@ export default function LoginForm({ data, setData }) {
                 <Label style={styles.labels}>Server</Label>
                 <Input 
                     style={styles.labels} 
-                    onChangeText={(val) => setAttribute("server", "http://192.168.1.163:3000", data, setData)} />
+                    onChangeText={(val) => setAttribute("server", "http://"+val, data, setData)} />
             </Item>
             <Item floatingLabel>
                 <Label style={styles.labels}>Username</Label>
