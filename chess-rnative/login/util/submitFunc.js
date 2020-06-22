@@ -1,15 +1,16 @@
 import axios from 'axios';
 import {TOKEN_KEY} from '../../storageKeys';
+import { AsyncStorage } from 'react-native';
 
 
 function request(url, data, setResponse, setAuth) {
     axios.post(url, data)
-    .then((res) => {
+    .then(async (res) => {
         setResponse({
             status: res.status,
             message: res.data.message
         });
-        localStorage.setItem(TOKEN_KEY, res.data.token);
+        await AsyncStorage.setItem(TOKEN_KEY, res.data.token);
         setAuth(true);
     })
     .catch((err) => {
@@ -21,20 +22,34 @@ function request(url, data, setResponse, setAuth) {
 }
 
 
-export function loginSubmit(event, setResponse, setAuth) {
-    event.preventDefault();
+export function loginSubmit(data, setResponse, setAuth) {
 
-    request('/auth/login', {
-        username: event.target.username.value,
-        password: event.target.password.value
+    if (!data.server || !data.username || !data.password) {
+        setResponse({
+            status: 500,
+            message: 'Missing some fields'
+        });
+        return;
+    }
+
+    request(data.server + '/auth/login', {
+        username: data.username,
+        password: data.password
         }, setResponse, setAuth);
 }
 
 
-export function validateForm(event, setResponse, setAuth, passRef, validPassRef) {
-    event.preventDefault();
+export function registerSubmit(data, setResponse, setAuth) {
 
-    if (passRef.current.value !== validPassRef.current.value) {
+    if (!data.server || !data.mail || !data.username || !data.password || !data.validpassword) {
+        setResponse({
+            status: 500,
+            message: 'Missing some fields'
+        });
+        return;
+    }   
+
+    if (data.password !== data.validpassword) {
         setResponse({
             status: '412',
             message: 'Passwords must be equal'
@@ -42,9 +57,9 @@ export function validateForm(event, setResponse, setAuth, passRef, validPassRef)
         return;
     }
     
-    request('/auth/register', {
-        username: event.target.username.value,
-        password: event.target.password.value,
-        email: event.target.email.value
+    request(data.server + '/auth/login', {
+        username: data.username,
+        password: data.password,
+        email: data.email
     }, setResponse, setAuth);
 }

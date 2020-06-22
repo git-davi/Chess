@@ -2,21 +2,25 @@ import React from 'react';
 
 import {Item, Label, Input} from 'native-base';
 
-export default function LoginForm() {
+import { setAttribute } from './util/utils';
+
+export default function LoginForm({ data, setData }) {
 
     return (
         <>
             <Item floatingLabel>
                 <Label>Server</Label>
-                <Input name='server'/>
+                <Input onChangeText={(val) => setAttribute("server", "http://"+val, data, setData)} />
             </Item>
             <Item floatingLabel>
                 <Label>Username</Label>
-                <Input name='username'/>
+                <Input onChangeText={(val) => setAttribute("username", val, data, setData)} />
             </Item>
             <Item floatingLabel>
                 <Label>Password</Label>
-                <Input name='password'/>
+                <Input 
+                    secureTextEntry
+                    onChangeText={(val) => setAttribute("password", val, data, setData)} />
             </Item>
         </>
     );

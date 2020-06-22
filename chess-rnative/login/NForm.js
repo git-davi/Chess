@@ -5,7 +5,7 @@ import Alert from './Alert';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
 
-import { validateForm, loginSubmit } from './util/submitFunc';
+import { registerSubmit, loginSubmit } from './util/submitFunc';
 import {AuthContext} from '../App'; 
 
 import { Form, Text, View } from 'native-base';
@@ -18,15 +18,16 @@ export default function nForm() {
 
     const [form, setForm] = useState('login');
     const [response, setResponse] = useState({ status: null, message: null });
+    const [data, setData] = useState({});
 
     const context = useContext(AuthContext);
 
     function login() {
-        //loginSubmit(event, setResponse, context.setAuth);
+        loginSubmit(data, setResponse, context.setAuth);
     }
 
     function register() {
-        //validateForm(event, setResponse, context.setAuth, passRef, validPassRef);
+        registerSubmit(data, setResponse, context.setAuth);
     }
 
     function changeForm() {
@@ -43,9 +44,8 @@ export default function nForm() {
             <Text>{form === 'login' ? 'Sign In' : 'Sign Up'}</Text>
             <Form>
                 { form === 'login' ? 
-                    <LoginForm/> : 
-                    <RegisterForm 
-                    passRef={passRef} validPassRef={validPassRef}/> }
+                    <LoginForm data={data} setData={setData}/> : 
+                    <RegisterForm data={data} setData={setData}/> }
                 <Alert response={response} />
                 <ButtonBar  
                     changeForm={changeForm}

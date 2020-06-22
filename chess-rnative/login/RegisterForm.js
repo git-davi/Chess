@@ -1,30 +1,38 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
 
 import {Item, Label, Input} from 'native-base';
+import { setAttribute } from './util/utils';
 
-export default function RegisterForm({ passRef, validPassRef }) {
+
+export default function RegisterForm({ data, setData }) {
 
     return (
         <>
             <Item floatingLabel>
                 <Label>Server</Label>
-                <Input name='server'/>
+                <Input onChangeText={(val) => setAttribute("server", "http://"+val, data, setData)} />
             </Item>
             <Item floatingLabel>
                 <Label>Mail</Label>
-                <Input name='mail'/>
+                <Input
+                    textContentType="emailAddress" 
+                    onChangeText={(val) => setAttribute("mail", val, data, setData)} />
             </Item>
             <Item floatingLabel>
                 <Label>Username</Label>
-                <Input name='username'/>
+                <Input onChangeText={(val) => setAttribute("username", val, data, setData)} />
             </Item>
             <Item floatingLabel>
                 <Label>Password</Label>
-                <Input innerRef={passRef} name='password'/>
+                <Input
+                    secureTextEntry 
+                    onChangeText={(val) => setAttribute("password", val, data, setData)} />
             </Item>
             <Item floatingLabel>
                 <Label>Repeat Password</Label>
-                <Input innerRef={validPassRef} />
+                <Input
+                    secureTextEntry 
+                    onChangeText={(val) => setAttribute("validpassword", val, data, setData)} />
             </Item>          
         </>
     );
