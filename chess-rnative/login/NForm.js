@@ -9,6 +9,7 @@ import { registerSubmit, loginSubmit } from './util/submitFunc';
 import {AuthContext} from '../App'; 
 
 import { Form, Text, View } from 'native-base';
+import { StyleSheet } from 'react-native';
 
 
 export default function nForm() {
@@ -41,7 +42,7 @@ export default function nForm() {
 
     return (
         <View>
-            <Text>{form === 'login' ? 'Sign In' : 'Sign Up'}</Text>
+            <Text style={styles.title}>{form === 'login' ? 'Sign In' : 'Sign Up'}</Text>
             <Form>
                 { form === 'login' ? 
                     <LoginForm data={data} setData={setData}/> : 
@@ -55,3 +56,11 @@ export default function nForm() {
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    title: {
+        fontWeight: 'bold',
+        textAlign: 'center',
+        color: '#fff'
+    }
+});

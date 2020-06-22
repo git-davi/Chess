@@ -57,7 +57,7 @@ export default function App() {
           setServer: setServer
         }}>
         <Container style={styles.container}>
-          <ScrollView>
+          <ScrollView style={styles.views}>
             { auth ? <Game /> : <Login /> }
           </ScrollView>
         </Container>
@@ -69,8 +69,10 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#484849',
     marginTop: StatusBar.currentHeight,
-    margin: 20
   },
+  views: {
+    margin: 20
+  }
 });
