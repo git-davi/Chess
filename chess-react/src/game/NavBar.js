@@ -12,12 +12,13 @@ export default function NavBar({ refresh, setRefresh }) {
 
     const authContext = useContext(AuthContext);
     
-    const token = localStorage.getItem(TOKEN_KEY);
+    const token = useState(localStorage.getItem(TOKEN_KEY))[0];
     const [userInfo, setUserInfo] = useState({});
 
 
     useEffect(() => {
         let mounted = true;
+
         try {
             var decodedToken = parseJwt(token);
         } catch (err) {
@@ -28,12 +29,15 @@ export default function NavBar({ refresh, setRefresh }) {
             method: 'get',
             url: '/game/user/' + decodedToken.username,
         }, authContext)
-        .then((res) => mounted ? setUserInfo(res.data) : null)
+        .then((res) => {
+            if (!mounted) return;
+            setUserInfo(res.data);
+            setRefresh(false);
+        })
         .catch((err) => console.log(err));
 
-        setRefresh(false);
         return () => mounted = false;
-    }, [token, authContext, refresh]);
+    }, [token, authContext, setRefresh, refresh]);
 
 
     return (
