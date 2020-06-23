@@ -18,7 +18,6 @@ export default function NavBar({ refresh, setRefresh }) {
 
     useEffect(() => {
         let mounted = true;
-
         try {
             var decodedToken = parseJwt(token);
         } catch (err) {

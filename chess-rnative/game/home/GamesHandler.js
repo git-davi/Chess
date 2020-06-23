@@ -5,7 +5,7 @@ import GamesList from './GamesList';
 import SearchGame from './SearchGame';
 
 
-export default function GamesHandler() {
+export default function GamesHandler({ refresh, setRefresh }) {
 
     const [games, setGames] = useState([]);
 
@@ -13,7 +13,7 @@ export default function GamesHandler() {
         <View>
             <View>
                 <SearchGame games={games} setGames={setGames}/>
-                <GamesList games={games} setGames={setGames}/>
+                <GamesList games={games} setGames={setGames} refresh={refresh} setRefresh={setRefresh} />
             </View>
         </View>
     );

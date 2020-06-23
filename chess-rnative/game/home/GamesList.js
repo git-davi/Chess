@@ -7,42 +7,26 @@ import {axiosAuthWrapper as axiosAW} from '../util/axiosAuthWrapper';
 
 import { View, Text, Button } from 'native-base'
 
-export default function GamesList({games, setGames}) {
+export default function GamesList({games, setGames, refresh, setRefresh}) {
 
     const authContext = useContext(AuthContext);
-    const [refresh, setRefresh] = useState(false);
 
 
     useEffect(() => {
         let mounted = true;
-        axiosAW({
-            method: 'get',
-            url: '/game/games',
-        }, authContext)
-        .then((res) => mounted ? setGames(res.data.games) : null)
-        .catch((err) => console.log(err.response));
-
-        return () => mounted = false;
-    }, [authContext, setGames]);
-
-
-    useEffect(() => {
-        let mounted = true;
-        if (!refresh) return () => mounted = false;
-        
         axiosAW({
             method: 'get',
             url: '/game/games',
         }, authContext)
         .then((res) => {
             if(!mounted) return;
-            setRefresh(false);
             setGames(res.data.games);
+            setRefresh(false);
         })
         .catch((err) => console.log(err.response));
 
         return () => mounted = false;
-    }, [refresh, authContext, setGames]);
+    }, [authContext, setGames, refresh, setRefresh]);
 
     
     return (

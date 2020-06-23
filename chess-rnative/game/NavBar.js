@@ -13,7 +13,6 @@ import { AsyncStorage } from 'react-native';
 export default function NavBar({ refresh, setRefresh }) {
 
     const authContext = useContext(AuthContext);
-    
     const [userInfo, setUserInfo] = useState({});
 
 
@@ -29,12 +28,15 @@ export default function NavBar({ refresh, setRefresh }) {
             method: 'get',
             url: '/game/user/' + decodedToken.username,
         }, authContext)
-        .then((res) => mounted ? setUserInfo(res.data) : null)
+        .then((res) => {
+            if (!mounted) return;
+            setUserInfo(res.data);
+            setRefresh(false);
+        })
         .catch((err) => console.log(err));
 
-        setRefresh(false);
         return () => mounted = false;
-    }, [authContext, refresh]);
+    }, [authContext, setRefresh, refresh]);
 
 
     return (

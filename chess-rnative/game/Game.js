@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { NativeRouter as Router, Switch, Route } from 'react-router-native';
 import { View } from 'native-base';
 
@@ -7,14 +7,9 @@ import GamesHandler from './home/GamesHandler';
 //import GameRoom from './play/GameRoom';
 
 
-
 export default function Game() {
     const [refresh, setRefresh] = useState();
     
-    useEffect(() => {
-        setRefresh(false);
-    }, [refresh]);
-
    return (
         <View>
             <Router>
@@ -24,7 +19,7 @@ export default function Game() {
                     </Route>
                     <Route path="/">
                         <NavBar refresh={refresh} setRefresh={setRefresh} />
-                        <GamesHandler />
+                        <GamesHandler refresh={refresh} setRefresh={setRefresh} />
                     </Route>
                 </Switch>
             </Router>
