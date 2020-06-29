@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-native';
-import { View, Text, Button } from 'native-base'
+import { View, Text, Button, Icon, Grid, Col, Card } from 'native-base'
+import { StyleSheet } from 'react-native';
 
 import {AuthContext} from '../../App';
 import {axiosAuthWrapper as axiosAW} from '../util/axiosAuthWrapper';
@@ -22,16 +23,69 @@ export default function GameItem( { game, name, setRefresh }) {
     }
 
     return (
-        <View>
-            <Text>Game : {name}</Text>
-            <Link to={'/room/'+game}>
-                <Button success>
-                    <Text>Play</Text>
-                </Button>
-            </Link>
-            <Button danger onPress={() => surrend()}>
-                <Text>Surrend</Text>
-            </Button>
+        <View style= {styles.margin}>
+            <Card style={styles.Cards}>
+            <Grid>
+                <Col style={styles.marginAll}>
+                    <Icon name={'logo-game-controller-b'} style={{color: '#805500'}}></Icon>
+                </Col>
+                <Col>
+                    <Text style={styles.Info}>Game : {name}</Text>
+                </Col>
+                <Col style={styles.widths}>
+                    <Link to={'/room/'+game}>
+                        <Button style ={styles.button} iconLeft success>
+                            <Icon name={'ios-play'}></Icon>
+                        </Button>
+                    </Link>
+                </Col>
+                <Col style={styles.widths}>
+                    <Button style = {styles.button} danger onPress={() => surrend()}>
+                        <Icon name={"ios-flag"}></Icon>
+                    </Button>
+                </Col>
+            </Grid>
+            </Card>
         </View>
+        
     );
 }
+
+const styles = StyleSheet.create({
+    Info: {
+       // color: 'white',
+       // textAlign: 'center',
+        //flex: 1
+        marginTop:"8%",
+        color: '#805500',
+
+    },
+
+    Cards: {
+        backgroundColor: '#ffe6b3' 
+      },
+
+    statusBad: {
+        color: 'red',
+        fontStyle: 'italic',
+        textAlign: 'center',
+        flex: 1
+    }, 
+
+    button: {
+    //marginLeft:"2%",
+    width:'90%',
+    },
+    margin:{
+        padding: '1%'
+    },
+    widths:{
+        width: '15%',
+    },
+
+    marginAll: {
+        marginTop: '2%',
+        width: '15%',
+        marginLeft: '1%'
+    }
+  });

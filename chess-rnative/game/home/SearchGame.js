@@ -1,9 +1,9 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { View, Text, Button } from 'native-base'
+import { View, Text, Button, Container, Card, Icon } from 'native-base'
 
 import {AuthContext} from '../../App';
 import {axiosAuthWrapper as axiosAW} from '../util/axiosAuthWrapper';
-
+import { StyleSheet } from 'react-native';
 
 
 export default function SearchGame({ games, setGames }) {
@@ -66,25 +66,60 @@ export default function SearchGame({ games, setGames }) {
 
 
     return (
-        <View>
-            <View>
-                <View>
+        <View style={styles.marginAll}>
+                <View style={styles.margin}>
                     { searchState === 'start' &&
-                    <Button danger onPress={() => setSearchState('stop')}>
-                        <Text>Stop Search</Text>
+                    <Button iconLeft style ={styles.button}  danger onPress={() => setSearchState('stop')}>
+                        <Icon name={"ios-warning"}></Icon>
+                        <Text style={styles.Info}>Stop Search</Text>
                     </Button> }
                     { searchState === 'idle' &&
-                    <Button success onPress={() => setSearchState('start')}>
-                        <Text>Search a New Game</Text>
+                    <Button iconLeft style ={styles.button} success onPress={() => setSearchState('start')}>
+                        <Icon name={"ios-search"}></Icon>
+                        <Text style={styles.Info }>Search a New Game </Text>
                     </Button> }
                     { searchState === 'stop' &&
-                    <Button warning>
-                        <Text>Stopping</Text>
+                    <Button iconLeft style ={styles.button} warning>
+                        <Icon name={'ios-pause'}></Icon>
+                        <Text style={styles.Info}>Stopping</Text>
                     </Button> }
                 </View>
-                { result.status === 'success' && <Text>{result.message}</Text> }
-                { result.status === 'failed' && <Text>{result.message}</Text> }
-            </View>
+                { result.status === 'success' && <Text style={styles.statusGood}>{result.message}</Text> }
+                { result.status === 'failed' && <Text style={styles.statusBad}>{result.message}</Text> }
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    Info: {
+        color: 'white',
+        textAlign: 'center',
+        flex: 1
+    },
+
+    statusGood: {
+        color: 'green',
+        fontStyle: 'italic',
+        textAlign: 'center',
+        flex: 1
+    },
+
+    statusBad: {
+        color: 'red',
+        fontStyle: 'italic',
+        textAlign: 'center',
+        flex: 1
+    }, 
+
+    button: {
+    marginLeft:"2%",
+    width:'70%',
+    },
+    margin:{
+        marginVertical:'4%'
+    },
+
+    marginAll: {
+        marginBottom: '2%'
+    }
+  });
