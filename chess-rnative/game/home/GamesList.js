@@ -9,7 +9,7 @@ import { View, Text, Button, Icon, Grid, Col} from 'native-base'
 import { StyleSheet } from 'react-native';
 
 
-export default function GamesList({games, setGames, refresh, setRefresh}) {
+export default function GamesList({games, setGames, refresh, setRefresh, navigation}) {
 
     const authContext = useContext(AuthContext);
 
@@ -51,7 +51,8 @@ export default function GamesList({games, setGames, refresh, setRefresh}) {
             {games.map((game) => <GameItem  key={game.game_uuid} 
                                             game={game.game_uuid} 
                                             name={game.name} 
-                                            setRefresh={setRefresh}/>)}
+                                            setRefresh={setRefresh}
+                                            navigation={navigation}/>)}
         </View>
     );
 }

@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-native';
 import { View, Text, Button, Icon, Grid, Col, Card } from 'native-base'
 import { StyleSheet } from 'react-native';
 
@@ -7,7 +6,7 @@ import {AuthContext} from '../../App';
 import {axiosAuthWrapper as axiosAW} from '../util/axiosAuthWrapper';
 
 
-export default function GameItem( { game, name, setRefresh }) {
+export default function GameItem( { game, name, setRefresh, navigation }) {
 
     // I could choose an api to generate random name for games instead of displaying uuid
     const authContext = useContext(AuthContext);
@@ -33,11 +32,12 @@ export default function GameItem( { game, name, setRefresh }) {
                     <Text style={styles.Info}>Game : {name}</Text>
                 </Col>
                 <Col style={styles.widths}>
-                    <Link to={'/room/'+game}>
-                        <Button style ={styles.button} iconLeft success>
-                            <Icon name={'ios-play'}></Icon>
-                        </Button>
-                    </Link>
+                    <Button style ={styles.button} 
+                            iconLeft 
+                            success 
+                            onPress={() => navigation.push('room', {game_uuid: game})}>
+                        <Icon name={'ios-play'}></Icon>
+                    </Button>
                 </Col>
                 <Col style={styles.widths}>
                     <Button style = {styles.button} danger onPress={() => surrend()}>

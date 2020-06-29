@@ -1,46 +1,30 @@
 import React, { useState } from 'react';
-import { NativeRouter as Router, Switch, Route } from 'react-router-native';
-import { View } from 'native-base';
 
-import NavBar from './NavBar';
-import GamesHandler from './home/GamesHandler';
-//import GameRoom from './play/GameRoom';
+import Room from './Room';
+import Home from './Home';
+
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
+
+const Stack = createStackNavigator();
+export const RefreshContext = React.createContext();
 
 
 export default function Game() {
     const [refresh, setRefresh] = useState();
     
    return (
-        <View>
-            <Router>
-                <Switch>
-                    <Route path="/room/:game_uuid">
-                        <NavBar refresh={refresh} setRefresh={setRefresh} />
-                    </Route>
-                    <Route path="/">
-                        <NavBar refresh={refresh} setRefresh={setRefresh} />
-                        <GamesHandler refresh={refresh} setRefresh={setRefresh} />
-                    </Route>
-                </Switch>
-            </Router>
-        </View>
+        <RefreshContext.Provider value={{
+            refresh: refresh,
+            setRefresh: setRefresh
+        }}>
+            <NavigationContainer>
+                <Stack.Navigator initialRouteName="home">
+                    <Stack.Screen name="room" component={Room}/>
+                    <Stack.Screen name="home" component={Home}/>
+                </Stack.Navigator>
+            </NavigationContainer>
+        </RefreshContext.Provider>    
     );
-    /*
-    return (
-        <View>
-            <Router>
-                <Switch>
-                    <Route path="/room/:game_uuid">
-                        <NavBar refresh={refresh} setRefresh={setRefresh} />
-                        <GameRoom setRefresh={setRefresh}/>
-                    </Route>
-                    <Route path="/">
-                        <NavBar refresh={refresh} setRefresh={setRefresh} />
-                        <GamesHandler />
-                    </Route>
-                </Switch>
-            </Router>
-        </View>
-    );
-    */
 }

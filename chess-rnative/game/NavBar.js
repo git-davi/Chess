@@ -1,5 +1,4 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Link } from 'react-router-native';
 import { View, Text, Button, Container, Card, Grid, Col, Icon } from 'native-base'
 
 import {AuthContext} from '../App';
@@ -8,7 +7,6 @@ import {axiosAuthWrapper as axiosAW} from './util/axiosAuthWrapper';
 import parseJwt from './util/parseJwt';
 import logout from './util/logout';
 import { StyleSheet } from 'react-native';
-import { AsyncStorage } from 'react-native';
 
 
 export default function NavBar({ refresh, setRefresh }) {
@@ -59,14 +57,11 @@ export default function NavBar({ refresh, setRefresh }) {
                     </Button >
                     </View>
                 </Col>
-            
                     <View style={styles.buttonView}>
-                        <Link to="/">
-                            <Button danger iconLeft onPress={() => logout(authContext, TOKEN_KEY)}>
-                                <Icon name = {'ios-log-out'}></Icon>
-                                <Text>Logout</Text>
-                            </Button>
-                        </Link>
+                        <Button danger iconLeft onPress={() => logout(authContext, TOKEN_KEY)}>
+                            <Icon name = {'ios-log-out'}></Icon>
+                            <Text>Logout</Text>
+                        </Button>
                     </View>
                 </Grid>
         </View>
