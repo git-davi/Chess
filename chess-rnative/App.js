@@ -72,9 +72,9 @@ export default function App() {
         }}>
 
         <NavigationContainer style={styles.container}>
-          <Stack.Navigator initialRouteName="home">
-              <Stack.Screen name="room" component={Room}/>
-              <Stack.Screen name="home" component={Home}/>
+          <Stack.Navigator initialRouteName="home" screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="room" component={Room} />
+              <Stack.Screen name="home" component={Home} />
           </Stack.Navigator>
         </NavigationContainer>
           

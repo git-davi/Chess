@@ -5,7 +5,7 @@ import { Container } from 'native-base';
 
 import NavBar from './NavBar';
 import GamesHandler from './home/GamesHandler'
-import { ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet, StatusBar } from 'react-native';
 
 export default function Home({ navigation }) {
 
@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: '#484849',
+      marginTop: StatusBar.currentHeight,
     },
     views: {
       margin: 20

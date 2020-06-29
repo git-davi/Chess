@@ -5,7 +5,7 @@ import NavBar from './NavBar';
 //import GameRoom from './play/GameRoom';
 
 import { Container } from 'native-base';
-import { ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet, StatusBar } from 'react-native';
 
 
 export default function Room({ route, navigation }) {
@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: '#484849',
+      marginTop: StatusBar.currentHeight,
     },
     views: {
       margin: 20
