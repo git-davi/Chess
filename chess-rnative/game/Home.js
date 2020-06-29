@@ -1,19 +1,33 @@
 import React, { useContext } from 'react';
-import { RefreshContext } from './Game';
+import { AuthContext } from '../App';
 
-import { View } from 'native-base';
+import { Container } from 'native-base';
 
 import NavBar from './NavBar';
 import GamesHandler from './home/GamesHandler'
+import { ScrollView, StyleSheet } from 'react-native';
 
-export default function Home() {
+export default function Home({ navigation }) {
 
-    const value = useContext(RefreshContext);
+    const value = useContext(AuthContext);
 
     return (
-        <View>
-            <NavBar refresh={value.refresh} setRefresh={value.setRefresh} />
-            <GamesHandler refresh={value.refresh} setRefresh={value.setRefresh}/>
-        </View>
+        <Container style={styles.container}>
+            <ScrollView style={styles.views}>
+                <NavBar refresh={value.refresh} setRefresh={value.setRefresh} />
+                <GamesHandler refresh={value.refresh} setRefresh={value.setRefresh} navigation={navigation}/>
+            </ScrollView>
+        </Container>
     );
 }
+
+
+const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: '#484849',
+    },
+    views: {
+      margin: 20
+    }
+  });
