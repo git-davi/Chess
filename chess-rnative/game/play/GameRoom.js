@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState } from 'react';
 
-//import PlayGame from './PlayGame';
+import PlayGame from './PlayGame';
 
 import { axiosAuthWrapper as axioAW } from '../util/axiosAuthWrapper';
 import { AuthContext } from '../../App';

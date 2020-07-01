@@ -42,12 +42,16 @@ export default class BoardView extends Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(nextProps) {
+    console.log('PORCODIOOOOOOOO');
     const nextFen = nextProps.fen;
     if (nextFen !== this.props.fen) {
       this.setState({
         board: this.createBoardData(this.state.game, nextFen),
-      });
+      });/*
+      if(nextFen != null) ????????????????????????
+      this.state.game.load(nextFen)
+      */
     }
   }
 

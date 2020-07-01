@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { axiosAuthWrapper as axiosAW } from '../util/axiosAuthWrapper';
 
 import Chessboard from 'chessboardjsx';
 //import WithMoveValidation from './WithMoveValidation'
 import parseJwt from '../util/parseJwt';
-import {TOKEN_KEY} from '../../storageKeys';
+import { View, Button, Text } from 'native-base';
+import Board from './board/Board'
 
 import ChessboardComp from './ChessboardComp';
+import { axiosAuthWrapper as axioAW } from '../util/axiosAuthWrapper';
+import { AuthContext } from '../../App';
 
 
 export default function PlayGame({ socket, game_uuid, white, black }) {
@@ -15,7 +18,11 @@ export default function PlayGame({ socket, game_uuid, white, black }) {
     const [move, setMove] = useState();
     const [myTurn, setMyTurn] = useState();
     const [gameState, setGameState] = useState();
-    const username = useState(parseJwt(localStorage.getItem(TOKEN_KEY)).username)[0];
+
+    //const username = useState(parseJwt(localStorage.getItem(TOKEN_KEY)).username)[0];
+            //diventa 
+    const authContext = useContext(AuthContext);
+    const username = useState(parseJwt(authContext.auth).username)[0];
 
     var fenFunction = null;
     function setFenFunction(callback) {
@@ -46,6 +53,8 @@ export default function PlayGame({ socket, game_uuid, white, black }) {
         socket.on(game_uuid, (data) => {
             if (!mounted) return;
             fenFunction(data.chessboard);
+            console.log('message received!');
+            console.log(data.chessboard);
             setChessboard(data.chessboard);
             setMove(data.move);
             setMyTurn(true);
@@ -81,7 +90,7 @@ export default function PlayGame({ socket, game_uuid, white, black }) {
     }
 
     var color;
-    color= username === white ? 'white' : 'black';
+    color= username === white ? 'w' : 'b';
    // console.log('i am player color : ' + color);
     /*
     console.log('----------------------------------------------');
@@ -92,8 +101,8 @@ export default function PlayGame({ socket, game_uuid, white, black }) {
     */
 
     return (
-        <div className="container">
-            <div className="row justify-content-center">
+        <View>
+            <View>
                 <ChessboardComp className="col"
                                 socket={socket} 
                                 game_uuid={game_uuid} 
@@ -109,46 +118,31 @@ export default function PlayGame({ socket, game_uuid, white, black }) {
                                 >
                     {({
                           position,
-                          onDrop,
-                          allowDrag,
-                          onListen,
-                          onMouseOverSquare,
-                          onMouseOutSquare,
-                          squareStyles,
-                          dropSquareStyle,
-                          // onDragOverSquare,
-                          onSquareClick,
-                          onSquareRightClick
+                          shouldSelectPiece,
+                          onMove,
+                          
                       }) => (
-                        <Chessboard
-                            id="humanVsHuman"
-                            calcWidth={({ screenWidth }) => (screenWidth < 500 ? 350 : 480)}
+                        <Board
+                            //id="humanVsHuman"
+                            //calcWidth={({ screenWidth }) => (screenWidth < 500 ? 350 : 480)}
                             position={chessboard}
-                            onDrop={onDrop}
-                            orientation={username === white? 'white' : 'black'}
-                            onMouseOverSquare={onMouseOverSquare}
-                            onMouseOutSquare={onMouseOutSquare}
-                            boardStyle={{
-                                borderRadius: '5px',
-                                boxShadow: `0 5px 15px rgba(0, 0, 0, 0.5)`
-                            }}
-                            squareStyles={squareStyles}
-                            dropSquareStyle={dropSquareStyle}
-                            allowDrag={allowDrag}
+                            //fen={chessboard}
+                            onMove={onMove}
+                           // color={color}
+                           // orientation={username === white? 'white' : 'black'}
+                            shouldSelectPiece={shouldSelectPiece}
                             //onDragOverSquare={onDragOverSquare}
-                            onSquareClick={onSquareClick}
-                            onSquareRightClick={onSquareRightClick}
                         />
                     )}
 
                 </ChessboardComp>
-            </div>
+            </View>
             {gameState && (
-                <div className="d-sm-flex justify-content-center m-5">
-                    <h1 className="alert alert-primary">{gameState}</h1>
-                </div>
+                <View>
+                    <Text>{gameState}</Text>
+                </View>
             ) }
 
-        </div>
+        </View>
     );
 }
