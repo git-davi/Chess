@@ -1,1 +1,6 @@
 node_modules
+chess-react/node_modules
+chess-rnative/.expo
+chess-rnative/.expo-shared
+chess-rnative/node_modules
+

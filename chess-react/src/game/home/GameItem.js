@@ -3,17 +3,19 @@ import { Link } from 'react-router-dom';
 
 import {AuthContext} from '../../App';
 import {axiosAuthWrapper as axiosAW} from '../util/axiosAuthWrapper';
+import { useContext } from 'react';
 
 
 export default function GameItem( { game, name, setRefresh }) {
 
     // I could choose an api to generate random name for games instead of displaying uuid
+    const authContext = useContext(AuthContext);
 
     function surrend() {
         axiosAW({
             method: 'delete',
             url: '/game/surrend/' + game
-        }, AuthContext)
+        }, authContext)
         .catch(() => console.log('Failed to surrend'));
 
         setRefresh(true);

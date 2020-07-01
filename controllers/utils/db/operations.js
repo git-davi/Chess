@@ -118,15 +118,18 @@ module.exports.createGame = async (game_uuid, name, player_1, player_2) => {
 }
 
 
-module.exports.deleteGame = async (game_uuid) => {
+async function deleteGame (game_uuid) {
+
     return await GameModel.destroy({
         where : {
             game_uuid: game_uuid
         }
     })
-    .catch(() => undefined)
+    .catch(() => undefined);
 }
 
+
+module.exports.deleteGame = deleteGame;
 
 module.exports.calculateEloGame = async (game_uuid, username, sp_1, sp_2) => {
     const result = await GameModel.findByPk(game_uuid)
@@ -161,4 +164,6 @@ module.exports.calculateEloGame = async (game_uuid, username, sp_1, sp_2) => {
     }, {
         where: {username: loser}
     });
+
+    await deleteGame(game_uuid);
 }
