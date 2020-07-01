@@ -30,25 +30,25 @@ export default class ChessboardComp extends Component {
         }*/
         stringa=this.props.position;
         this.game = new Chess(this.props.chessboard);
-        console.log('lo stato della chessboard è *******************************');
-        console.log(stringa);
+        //console.log('lo stato della chessboard è *******************************');
+        //console.log(stringa);
         //this.game.load(stringa)
         //fenFunction= () => console.log('it worked');
         //this.game.load(this.props.chessboard);
         //fenFunction=this.game.load;
         this.props.setFenFunction(this.game.load);
-        console.log("component mounted!")
+        //console.log("component mounted!")
 
     }
 
     testFunction(){
-        console.log("fenFunction correctly executing!")
+        //console.log("fenFunction correctly executing!")
     }
 
     componentDidUpdate() {
         //console.log('i am updating!')
         if(this.game.fen() !== this.props.chessboard){
-            console.log('i am inside!')
+            //console.log('i am inside!')
             if(this.props.chessboard != null && this.game.fen() === 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'){
                 this.game.load(this.props.chessboard);
             }
@@ -93,23 +93,23 @@ export default class ChessboardComp extends Component {
         let check=false;
         let draw=false;
 
-        console.log('controllo lo stato della scacchiera')
-        console.log(this.game.fen());
+        //console.log('controllo lo stato della scacchiera')
+        //console.log(this.game.fen());
 
         if(this.game.in_checkmate()===true){
             checkmate=true;
-            console.log('checkmate!!!!!');
+            //console.log('checkmate!!!!!');
         }
 
         if(this.game.in_check()===true){
             check=true;
             //this.game.load('rnb1kbnr/pppp1ppp/8/4p3/5PPq/8/PPPPP2P/RNBQKBNR w KQkq - 1 3')
-            console.log('in checkkooooo!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+            //console.log('in checkkooooo!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
         }
         
         if(this.game.in_draw()===true){
             draw=true;
-            console.log('draw game!!!!!');
+            //console.log('draw game!!!!!');
         }    
         
         if (checkmate)

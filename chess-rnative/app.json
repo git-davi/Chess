@@ -22,7 +22,13 @@
       "**/*"
     ],
     "ios": {
+      "bundleIdentifier": "com.unimore.chess",
+      "buildNumber": "1.0.0",
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.unimore.chess",
+      "versionCode": 1
     }
   }
 }
