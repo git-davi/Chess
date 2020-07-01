@@ -32,9 +32,8 @@ export default function GamesList({games, setGames, refresh, setRefresh, navigat
 
     
     return (
-        <View>
-            <View>
-                <Grid>
+        <View style={{margin: '1%'}}>
+                <Grid style={{marginLeft: '5%'}}>
                     <Col style={styles.widths}>
                         <Icon name="ios-list"></Icon>
                     </Col>
@@ -47,7 +46,7 @@ export default function GamesList({games, setGames, refresh, setRefresh, navigat
                         </Button>
                     </Col>
                 </Grid>
-            </View>
+            
             {games.map((game) => <GameItem  key={game.game_uuid} 
                                             game={game.game_uuid} 
                                             name={game.name} 

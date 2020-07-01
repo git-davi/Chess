@@ -26,7 +26,7 @@ export default function GameItem( { game, name, setRefresh, navigation }) {
             <Card style={styles.Cards}>
             <Grid>
                 <Col style={styles.marginAll}>
-                    <Icon name={'logo-game-controller-b'} style={{color: '#805500'}}></Icon>
+                    <Icon name={'logo-game-controller-b'} style={styles.gameLogo}></Icon>
                 </Col>
                 <Col>
                     <Text style={styles.Info}>Game : {name}</Text>
@@ -62,7 +62,8 @@ const styles = StyleSheet.create({
     },
 
     Cards: {
-        backgroundColor: '#ffe6b3' 
+        backgroundColor: '#ffe6b3',
+        padding: '1%'
       },
 
     statusBad: {
@@ -71,6 +72,11 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         flex: 1
     }, 
+
+    gameLogo: {
+        color: '#805500',
+        marginLeft: '15%'
+    },
 
     button: {
     //marginLeft:"2%",
