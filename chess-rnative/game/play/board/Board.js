@@ -38,21 +38,27 @@ export default class BoardView extends Component {
 
     this.state = {
       game,
-      board: this.createBoardData(game, props.fen),
+      board: this.createBoardData(game, props.position),
     };
   }
 
   componentDidUpdate(nextProps) {
-    console.log('PORCODIOOOOOOOO');
-    const nextFen = nextProps.fen;
-    if (nextFen !== this.props.fen) {
-      this.setState({
-        board: this.createBoardData(this.state.game, nextFen),
-      });/*
-      if(nextFen != null) ????????????????????????
-      this.state.game.load(nextFen)
-      */
-    }
+    //console.log('PORCODIOOOOOOOO');
+    /*console.log('board =')
+    console.log(this.state.board)*/
+   // console.log(nextProps)
+    console.log(nextProps.position);
+    console.log(this.state.game.fen())
+    //console.log(this.props.position);
+    const nextFen = nextProps.position;
+       //if (nextFen !== this.state.game.fen()) {
+      //this.setState({
+       /* board:*/ this.createBoardData(this.state.game, nextFen)
+    //  });/*
+    // if(nextFen != null) ????????????????????????
+     // this.state.game.load(nextFen)
+     // */
+    //}
   }
 
   movePiece = (to, from) => {

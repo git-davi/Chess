@@ -51,7 +51,7 @@ export default class ChessboardComp extends Component {
         }
     }
     
-    shouldSelectPiece = ({sourceSquare, pieceSquare}) => {
+    shouldSelectPiece = () => {
         // do not pick up pieces if the game is over
         // or if it's not that side's turn
         //console.log("sono entrato");
@@ -80,7 +80,7 @@ export default class ChessboardComp extends Component {
         // illegal move
         if (move === null) return;
 
-        this.setState(({ history, pieceSquare }) => ({
+        this.setState(() => ({
             fen: this.game.fen(),
            // history: this.game.history({ verbose: true }),
         }));
