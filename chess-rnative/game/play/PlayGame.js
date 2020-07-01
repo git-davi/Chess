@@ -8,7 +8,6 @@ import { View, Button, Text } from 'native-base';
 import Board from './board/Board'
 
 import ChessboardComp from './ChessboardComp';
-import { axiosAuthWrapper as axioAW } from '../util/axiosAuthWrapper';
 import { AuthContext } from '../../App';
 
 
@@ -35,7 +34,7 @@ export default function PlayGame({ socket, game_uuid, white, black }) {
         axiosAW({
             method: 'get',
             url: '/game/info/state/' + game_uuid
-        })
+        }, authContext)
             .then((res) => {
                 if (!mounted) return;
                 setChessboard(res.data.chessboard)
@@ -53,8 +52,8 @@ export default function PlayGame({ socket, game_uuid, white, black }) {
         socket.on(game_uuid, (data) => {
             if (!mounted) return;
             fenFunction(data.chessboard);
-            console.log('message received!');
-            console.log(data.chessboard);
+           /* console.log('message received!');
+            console.log(data.chessboard);*/
             setChessboard(data.chessboard);
             setMove(data.move);
             setMyTurn(true);
@@ -83,14 +82,14 @@ export default function PlayGame({ socket, game_uuid, white, black }) {
             draw: isDraw
         });
       //  console.log(new_move);
-        console.log('check?'+ isCheck);
+     //   console.log('check?'+ isCheck);
         //setMove(new_move);
         setChessboard(new_chessboard);
         setMyTurn(false);
     }
 
     var color;
-    color= username === white ? 'w' : 'b';
+    color= username === white ? 'white' : 'black';
    // console.log('i am player color : ' + color);
     /*
     console.log('----------------------------------------------');

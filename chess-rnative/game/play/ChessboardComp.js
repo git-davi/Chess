@@ -41,8 +41,12 @@ export default class ChessboardComp extends Component {
 
     }
 
+    testFunction(){
+        console.log("fenFunction correctly executing!")
+    }
+
     componentDidUpdate() {
-        console.log('i am updating!')
+        //console.log('i am updating!')
         if(this.game.fen() !== this.props.chessboard){
             console.log('i am inside!')
             if(this.props.chessboard != null && this.game.fen() === 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'){
