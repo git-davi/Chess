@@ -192,6 +192,7 @@ export default class ChessboardComp extends Component {
 
     onMouseOutSquare = square => this.removeHighlightSquare(square);
 
+    /*
     onSquareClick = square => {
         this.setState(({ history }) => ({
             squareStyles: squareStyling({ pieceSquare: square, history }),
@@ -214,7 +215,7 @@ export default class ChessboardComp extends Component {
             pieceSquare: ''
         });
     };
-
+    */
     
     onSquareRightClick = square => {
         this.setState({
